@@ -15,7 +15,7 @@ private:
     double intRate;
     double serCharge;
 
-    double round(double value, int decimal);
+    double roundNum(double value, int decimal);
 
 public:
     BankAccount(string actNum, double bal, double rate);
@@ -23,7 +23,7 @@ public:
     virtual void withdraw(double amount) = 0;
     void calcInt();
     void yearlyCharge();
-    void closeAct();
+    virtual void closeAct() = 0;
 
 };
 
@@ -34,7 +34,12 @@ BankAccount::BankAccount(string actNum, double bal, double rate)
     intRate = rate;
 }
 
-double BankAccount::round(double value, int decimal)
+void BankAccount::yearlyCharge()
+{
+    balance -= serCharge; //check for once in a calendar year!
+}
+
+double BankAccount::roundNum(double value, int decimal)
 {
     double multiplier = pow(10, decimal);
     value = value * multiplier; //makes so the integer part will have all the numbers wanted
@@ -55,7 +60,7 @@ void BankAccount::calcInt()
 {
     double dailyIntRate = intRate / 365; //maybe change in future to account for leap years
     double dailyInt = dailyIntRate * balance;
-    balance = round(balance + dailyInt, 2); //private member function to round to a given amount of decimals
+    balance = roundNum(balance + dailyInt, 2); //private member function to round to a given amount of decimals
 }
 
 #endif
