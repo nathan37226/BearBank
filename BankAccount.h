@@ -82,7 +82,7 @@ string BankAccount::getActNum()
 
 void BankAccount::setBal(double bal)
 {
-    balance = bal;
+    balance = roundNum(bal, 2);
 }
 
 double BankAccount::getBal()
