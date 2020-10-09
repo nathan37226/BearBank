@@ -92,6 +92,11 @@ void CheckingAccount::deposit(double amount)
     }
 }
 
+void CheckingAccount::nsfCharge()
+{
+    setBal( getBal() - 25.00 );
+}
+
 void CheckingAccount::withdraw(double amount)
 {
     ;
