@@ -23,7 +23,13 @@ public:
     virtual void withdraw(double amount) = 0;
     void calcInt();
     void yearlyCharge();
-    virtual void closeAct() = 0;
+    virtual void closeAcc() = 0;
+
+    //setter and getter functs, for derived class use
+    void setActNum(string num);
+    string getActNum();
+    void setBal(double bal);
+    double getBal();
 
 };
 
@@ -61,6 +67,27 @@ void BankAccount::calcInt()
     double dailyIntRate = intRate / 365; //maybe change in future to account for leap years
     double dailyInt = dailyIntRate * balance;
     balance = roundNum(balance + dailyInt, 2); //private member function to round to a given amount of decimals
+}
+
+//Setter and Getter functions
+void BankAccount::setActNum(string num)
+{
+    accountNum = num;
+}
+
+string BankAccount::getActNum()
+{
+    return accountNum;
+}
+
+void BankAccount::setBal(double bal)
+{
+    balance = bal;
+}
+
+double BankAccount::getBal()
+{
+    return balance;
 }
 
 #endif
