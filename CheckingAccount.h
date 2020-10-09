@@ -31,20 +31,25 @@ void CheckingAccount::setRisk(int option)
 {
     try
     {
+        string actNum = getActNum();
         switch (option)
         {
             case 1:
             {
                 flag = "Low Risk";
-                if (accountNum.substr(0,1) == "*")
-                    accountNum = accountNum.substr(1, string::npos); //getting rid of *, which denotes high risk
+                if (actNum.substr(0,1) == "*")
+                {
+                    setActNum( actNum.substr(1, string::npos) ); //getting rid of *, which denotes high risk
+                }
                 break;
             }
             case 2:
             {
                 flag = "High Risk";
-                if (accountNum.substr(0,1) != "*")
-                    accountNum = "*" + accountNum; //adding high risk marker to the act num
+                if (actNum.substr(0,1) != "*")
+                {
+                    setActNum( "*" + actNum ); //adding high risk marker to the act num
+                }
                 break;
             }
             default:
@@ -59,7 +64,7 @@ void CheckingAccount::setRisk(int option)
             cout << err << endl;
         }
 
-    cout << accountNum << endl;
+    cout << getActNum() << endl;
 }
 
 void CheckingAccount::deposit(double amount)
