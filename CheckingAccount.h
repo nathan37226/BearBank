@@ -15,16 +15,16 @@ private:
     void nsfCharge();
 
 public:
-    CheckingAccount(string actNum, double bal, double rate, int risk);
+    CheckingAccount(string actNum, double bal, double rate);
     void deposit(double amount);
     void withdraw(double amount);
     void closeAcc();
     void setRisk(int option);
 };
 
-CheckingAccount::CheckingAccount(string actNum, double bal, double rate, int risk) : BankAccount(actNum, bal, rate) 
+CheckingAccount::CheckingAccount(string actNum, double bal, double rate) : BankAccount(actNum, bal, rate) 
 {
-    setRisk(risk); //low risk initially
+    ;
 }
 
 void CheckingAccount::setRisk(int option)
@@ -36,11 +36,15 @@ void CheckingAccount::setRisk(int option)
             case 1:
             {
                 flag = "Low Risk";
+                if (accountNum.substr(0,1) == "*")
+                    accountNum = accountNum.substr(1, string::npos); //getting rid of *, which denotes high risk
                 break;
             }
             case 2:
             {
                 flag = "High Risk";
+                if (accountNum.substr(0,1) != "*")
+                    accountNum = "*" + accountNum; //adding high risk marker to the act num
                 break;
             }
             default:
@@ -54,11 +58,33 @@ void CheckingAccount::setRisk(int option)
         {
             cout << err << endl;
         }
+
+    cout << accountNum << endl;
 }
 
 void CheckingAccount::deposit(double amount)
 {
-    ;
+    try
+    {
+        if (amount < 0.0)
+        {
+            string error = "Invalid argument: you cannot deposit a negative amount";
+            throw error;
+        }
+        else if (amount <= 9999.0)
+        {
+            setBal( getBal() + amount );
+        }
+        else
+        {
+            setBal( getBal() + amount );
+            setRisk(2); // since more than $9999.00 deposited, must flag acct as high risk
+        }
+    }
+    catch (string err)
+    {
+        cout << err << endl;
+    }
 }
 
 void CheckingAccount::withdraw(double amount)
