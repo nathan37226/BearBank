@@ -38,18 +38,18 @@ void CheckingAccount::setRisk(int option)
             case 1:
             {
                 flag = "Low Risk";
-                if (actNum.substr(0,1) == "*")
+                if (actNum.substr(actNum.length() - 1, string::npos) == "*") //comparing to last char of the actNum
                 {
-                    setActNum( actNum.substr(1, string::npos) ); //getting rid of *, which denotes high risk
+                    setActNum( actNum.substr(0, actNum.length() - 1) ); //getting rid of *, which denotes high risk
                 }
                 break;
             }
             case 2:
             {
                 flag = "High Risk";
-                if (actNum.substr(0,1) != "*")
+                if (actNum.substr(actNum.length() - 1, string::npos) != "*") //comparison with last char
                 {
-                    setActNum( "*" + actNum ); //adding high risk marker to the act num
+                    setActNum( actNum + "*" ); //adding high risk marker to the act num
                 }
                 break;
             }
@@ -122,7 +122,7 @@ void CheckingAccount::withdraw(double amount)
         }
         else //i.e. paying the nsf fee will make account go negative
         {
-            nsfCharge();
+            nsfCharge(); //this will technically allow for infinite nsf fee's, so there should be a stop implemented sometime
             setRisk(2);
         }
     }
