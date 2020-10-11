@@ -40,6 +40,11 @@ void SavingsAccount::setStatus(int option)
 				status = "Inactive";
 				break;
 			}
+			case 3:
+			{
+				status = "Permanently Closed";
+				break;
+			}
 			default:
 			{
 				string error = "Invalid arguement: setStatus expects 1 or 2, got passed the value " + to_string(option);
@@ -69,6 +74,29 @@ void SavingsAccount::deposit(double amount)
 	catch (string err)
 	{
 		cout << err << endl;
+	}
+}
+
+void SavingsAccount::withdraw(double amount)
+{
+	try
+	{
+		if (amount < 0.01)
+		{
+			string error = "Invalid Arguement: cannot withdraw less than $0.00";
+			throw error;
+		}
+	}
+	catch (string err)
+	{
+		cout << err << endl;
+	}
+
+	double newBal = getBal() - amount;
+
+	if (newBal < 1.0)
+	{
+		if (getBal() > )
 	}
 }
 
