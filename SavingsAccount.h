@@ -9,7 +9,7 @@ class SavingsAccount : public BankAccount
 {
 private:
 	string status;
-	void setStatus();
+	void setStatus(int option);
 public:
 	SavingsAccount(string actNum, double bal, double rate);
 	void deposit(double amount);
@@ -22,6 +22,36 @@ SavingsAccount::SavingsAccount(string actNum, double bal, double rate) : BankAcc
 	;
 }
 
+void SavingsAccount::setStatus(int option)
+{
+	try
+	{
+		string actNum = getActNum();
+
+		switch (option)
+		{
+			case 1:
+			{
+				status = "Active";
+				break;
+			}
+			case 2:
+			{
+				status = "Inactive";
+				break;
+			}
+			default:
+			{
+				string error = "Invalid arguement: setStatus expects 1 or 2, got passed the value " + to_string(option);
+				throw error;
+			}
+		}
+	}
+	catch (string err)
+	{
+		cout << err << endl;
+	}
+}
 void SavingsAccount::deposit(double amount)
 {
 	try
@@ -40,5 +70,10 @@ void SavingsAccount::deposit(double amount)
 	{
 		cout << err << endl;
 	}
+}
+
+void SavingsAccount::closeAcc()
+{
+	;
 }
 #endif
