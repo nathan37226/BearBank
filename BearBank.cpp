@@ -21,7 +21,9 @@ int main()
     Accounts actSet3;
     actSet3.chk = acc3;
 
-    vector<Accounts> acctVect;
+    vector<Accounts> acctVect {actSet1, actSet2, actSet3};
+
+    saveInfo(acctVect);
 
     return 0;
 }
