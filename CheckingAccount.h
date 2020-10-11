@@ -31,24 +31,25 @@ void CheckingAccount::setRisk(int option)
 {
     try
     {
-        string actNum = getActNum();
+        string actNum = getActNum(); //for easier access later
+
         switch (option)
         {
             case 1:
             {
                 flag = "Low Risk";
-                if (actNum.substr(0,1) == "*")
+                if (actNum.substr(actNum.length() - 1, string::npos) == "*") //comparing to last char of the actNum
                 {
-                    setActNum( actNum.substr(1, string::npos) ); //getting rid of *, which denotes high risk
+                    setActNum( actNum.substr(0, actNum.length() - 1) ); //getting rid of *, which denotes high risk
                 }
                 break;
             }
             case 2:
             {
                 flag = "High Risk";
-                if (actNum.substr(0,1) != "*")
+                if (actNum.substr(actNum.length() - 1, string::npos) != "*") //comparison with last char
                 {
-                    setActNum( "*" + actNum ); //adding high risk marker to the act num
+                    setActNum( actNum + "*" ); //adding high risk marker to the act num
                 }
                 break;
             }
@@ -64,7 +65,6 @@ void CheckingAccount::setRisk(int option)
             cout << err << endl;
         }
 
-    cout << getActNum() << endl;
 }
 
 void CheckingAccount::deposit(double amount)
@@ -76,7 +76,7 @@ void CheckingAccount::deposit(double amount)
             string error = "Invalid argument: you cannot deposit a negative amount";
             throw error;
         }
-        else if (amount <= 9999.0)
+        else if (amount <= 9999.0) //will not flag account
         {
             setBal( getBal() + amount );
         }
@@ -92,9 +92,44 @@ void CheckingAccount::deposit(double amount)
     }
 }
 
+void CheckingAccount::nsfCharge()
+{
+    setBal( getBal() - 25.00 ); //always a 25.00 fee
+}
+
 void CheckingAccount::withdraw(double amount)
 {
-    ;
+    try
+    {
+        if (amount < 0.0)
+        {
+            string error = "Invalid Argument: cannot withdraw less than $0.00";
+            throw error;
+        }
+    }
+    catch(string err)
+    {
+        cout << err << endl;
+    }
+    
+    double newBal = getBal() - amount;
+
+    if (newBal < 0.0)
+    {
+        if (getBal() >= 25.00) //i.e. can pay the fee without going neg
+        {
+            nsfCharge(); //only charge fee, and the wanted withdraw will be discarded
+        }
+        else //i.e. paying the nsf fee will make account go negative
+        {
+            nsfCharge(); //this will technically allow for infinite nsf fee's, so there should be a stop implemented sometime
+            setRisk(2);
+        }
+    }
+    else
+    {
+        setBal(newBal);
+    }
 }
 
 void CheckingAccount::closeAcc()
