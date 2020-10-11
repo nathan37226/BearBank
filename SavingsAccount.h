@@ -94,9 +94,17 @@ void SavingsAccount::withdraw(double amount)
 
 	double newBal = getBal() - amount;
 
-	if (newBal < 1.0)
+	if (newBal < 50.0)
 	{
-		if (getBal() > )
+		//charge 5 fee
+		if (getBal() < 1.00)
+		{
+			//close
+		}
+		else
+		{
+			//set status as inactive
+		}
 	}
 }
 
