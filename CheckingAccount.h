@@ -15,6 +15,7 @@ private:
     void nsfCharge();
 
 public:
+    CheckingAccount(){}
     CheckingAccount(string actNum, double bal, double rate);
     void deposit(double amount);
     void withdraw(double amount);

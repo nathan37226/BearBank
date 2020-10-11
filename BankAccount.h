@@ -18,6 +18,7 @@ private:
     double roundNum(double value, int decimal);
 
 public:
+    BankAccount(){}
     BankAccount(string actNum, double bal, double rate);
     virtual void deposit(double amount) = 0;
     virtual void withdraw(double amount) = 0;
