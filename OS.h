@@ -122,11 +122,30 @@ void saveInfo(vector<Accounts> acctVect)
 
     for (int i=0; i < acctVect.size(); i++)
     {
-        outFile << "Account " << to_string(i) << endl;
         outFile << getAccountInfo(acctVect[i]) << endl;
     }
 
     outFile.close();
+}
+
+bool validateInput(string inputNum)
+{
+    double num = stod(inputNum);
+    if (num < 0.01) //cannot withdraw or deposit less than a cent
+    {
+        return false;
+    }
+    else
+    {
+        if (num != BankAccount::roundNum(num, 2)) //e.g. depositing 10.056 isn't the same as 10.05
+        {
+            return false;
+        }
+        else //if a rounded double to 2 decimals is the same as the input, then the number is valid!
+        {
+            return true;
+        }
+    }    
 }
 
 #endif
