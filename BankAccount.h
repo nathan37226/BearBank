@@ -15,16 +15,16 @@ private:
     double intRate;
     double serCharge;
 
-    double roundNum(double value, int decimal);
 
 public:
     BankAccount(){}
     BankAccount(string actNum, double bal, double rate);
-    virtual void deposit(double amount) = 0;
-    virtual void withdraw(double amount) = 0;
+    virtual string deposit(double amount) = 0;
+    virtual string withdraw(double amount) = 0;
     void calcInt();
     void performSerCharge();
     virtual void closeAcc() = 0;
+    static double roundNum(double value, int decimal); //used to help validate user input for depoit and withdraw, hence static
 
     //setter and getter functs, for derived class use
     void setActNum(string num);
