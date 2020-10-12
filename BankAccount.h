@@ -32,6 +32,7 @@ public:
     void setBal(double bal);
     double getBal();
     double getRate();
+    void setSerCharge(double charge);
 
 };
 
@@ -95,6 +96,11 @@ double BankAccount::getBal()
 double BankAccount::getRate()
 {
     return intRate;
+}
+
+void BankAccount::setSerCharge(double charge)
+{
+    serCharge = charge;
 }
 
 #endif
