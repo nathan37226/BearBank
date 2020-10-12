@@ -18,6 +18,7 @@ private:
     double roundNum(double value, int decimal);
 
 public:
+    BankAccount(){}
     BankAccount(string actNum, double bal, double rate);
     virtual void deposit(double amount) = 0;
     virtual void withdraw(double amount) = 0;
@@ -30,6 +31,8 @@ public:
     string getActNum();
     void setBal(double bal);
     double getBal();
+    double getRate();
+    void setSerCharge(double charge);
 
 };
 
@@ -88,6 +91,16 @@ void BankAccount::setBal(double bal)
 double BankAccount::getBal()
 {
     return balance;
+}
+
+double BankAccount::getRate()
+{
+    return intRate;
+}
+
+void BankAccount::setSerCharge(double charge)
+{
+    serCharge = charge;
 }
 
 #endif
