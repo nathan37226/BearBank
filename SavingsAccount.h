@@ -13,8 +13,8 @@ private:
 public:
     SavingsAccount(){}
 	SavingsAccount(string actNum, double bal, double rate);
-	void deposit(double amount);
-	void withdraw(double amount);
+	string deposit(double amount);
+	string withdraw(double amount);
 	void closeAcc();
     string getStatus();
     void setStatus(int option);
@@ -66,7 +66,7 @@ string SavingsAccount::getStatus()
     return status;
 }
 
-void SavingsAccount::deposit(double amount)
+string SavingsAccount::deposit(double amount)
 {
 	try
 	{
@@ -84,9 +84,12 @@ void SavingsAccount::deposit(double amount)
 	{
 		cout << err << endl;
 	}
+    string amnt = to_string(amount);
+    amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
+    return "You have successfully deposited $" + amnt + " into your account.";
 }
 
-void SavingsAccount::withdraw(double amount)
+string SavingsAccount::withdraw(double amount)
 {
 	try
 	{
@@ -115,6 +118,7 @@ void SavingsAccount::withdraw(double amount)
 			//set status as inactive
 		}
 	}*/
+    return "not implemented";
 }
 
 void SavingsAccount::closeAcc()
