@@ -17,8 +17,8 @@ private:
 public:
     CheckingAccount(){}
     CheckingAccount(string actNum, double bal, double rate);
-    void deposit(double amount);
-    void withdraw(double amount);
+    string deposit(double amount);
+    string withdraw(double amount);
     void closeAcc();
     void setRisk(int option);
 };
@@ -68,7 +68,7 @@ void CheckingAccount::setRisk(int option)
 
 }
 
-void CheckingAccount::deposit(double amount)
+string CheckingAccount::deposit(double amount)
 {
     try
     {
@@ -91,6 +91,9 @@ void CheckingAccount::deposit(double amount)
     {
         cout << err << endl;
     }
+    string amnt = to_string(amount);
+    amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
+    return "You have successfully deposited $" + amnt + " into your account.";
 }
 
 void CheckingAccount::nsfCharge()
@@ -98,7 +101,7 @@ void CheckingAccount::nsfCharge()
     setBal( getBal() - 25.00 ); //always a 25.00 fee
 }
 
-void CheckingAccount::withdraw(double amount)
+string CheckingAccount::withdraw(double amount)
 {
     try
     {
@@ -131,6 +134,9 @@ void CheckingAccount::withdraw(double amount)
     {
         setBal(newBal);
     }
+    string amnt = to_string(amount);
+    amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
+    return "You have withdrawn $" + amnt + " from you account.";
 }
 
 void CheckingAccount::closeAcc()

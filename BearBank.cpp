@@ -2,12 +2,20 @@
 Group Members: Nathan Obert M03134502, Keegan Maynard 
 */
 #include <iostream>
-#include "CheckingAccount.h"
+#include "OS.h"
 #include <string>
+#include <vector>
+
+
 
 int main()
-{
-    CheckingAccount chk = CheckingAccount("C0001", 50.00, 2.00);
-    chk.deposit(10000.00);
+{   
+    vector<Accounts> acctVect = {};
+    acctVect = getInfo();
+    string message;
+    cout << acctVect[0].chk.getBal() << endl;
+    acctVect[0].chk.deposit(420.00);
+    cout << message << endl;
+    cout << to_string(acctVect[0].chk.getBal()) << endl;
     return 0;
 }
