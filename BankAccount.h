@@ -23,7 +23,7 @@ public:
     virtual void deposit(double amount) = 0;
     virtual void withdraw(double amount) = 0;
     void calcInt();
-    void yearlyCharge();
+    void performSerCharge();
     virtual void closeAcc() = 0;
 
     //setter and getter functs, for derived class use
@@ -43,7 +43,7 @@ BankAccount::BankAccount(string actNum, double bal, double rate)
     intRate = rate;
 }
 
-void BankAccount::yearlyCharge()
+void BankAccount::performSerCharge()
 {
     balance -= serCharge; //check for once in a calendar year!
 }
