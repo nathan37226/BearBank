@@ -9,12 +9,15 @@ class SavingsAccount : public BankAccount
 {
 private:
 	string status;
-	void setStatus(int option);
+
 public:
+    SavingsAccount(){}
 	SavingsAccount(string actNum, double bal, double rate);
 	void deposit(double amount);
 	void withdraw(double amount);
 	void closeAcc();
+    string getStatus();
+    void setStatus(int option);
 };
 
 SavingsAccount::SavingsAccount(string actNum, double bal, double rate) : BankAccount(actNum, bal, rate)
@@ -57,6 +60,12 @@ void SavingsAccount::setStatus(int option)
 		cout << err << endl;
 	}
 }
+
+string SavingsAccount::getStatus()
+{
+    return status;
+}
+
 void SavingsAccount::deposit(double amount)
 {
 	try
@@ -94,7 +103,7 @@ void SavingsAccount::withdraw(double amount)
 
 	double newBal = getBal() - amount;
 
-	if (newBal < 50.0)
+	/*if (newBal < 50.0)
 	{
 		//charge 5 fee
 		if (getBal() < 1.00)
@@ -105,7 +114,7 @@ void SavingsAccount::withdraw(double amount)
 		{
 			//set status as inactive
 		}
-	}
+	}*/
 }
 
 void SavingsAccount::closeAcc()
