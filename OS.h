@@ -24,33 +24,36 @@ void saveInfo(vector<Accounts> acctVect);
 CheckingAccount createChkFromInfo(string info);
 SavingsAccount createSavFromInfo(string info);
 
-string INITIAL_ACCT_NUM = "00001"; //global variable for acct num
+string INITIAL_ACCT_NUM = "00001"; //global variable for acct num, means there can be up to 100000 distinct accounts
 
+//used to display a double properly in conjunction with cout
 string displayNum(double input)
 {
     string num = to_string(input);
     return num.substr(0, num.length() - 4); //cuts off the last 0000 of the double
 }
 
+//returns all info about a set of accounts as a string
 string getAccountInfo(Accounts accts)
 {
-    string chkInfo = "", savInfo;
-    chkInfo = accts.chk.getActNum() + " " + to_string( accts.chk.getBal() ) + " " + to_string( accts.chk.getRate() );
+    string chkInfo = "", savInfo = "";
+    chkInfo = accts.chk.getActNum() + " " + to_string( accts.chk.getBal() ) + " " + to_string( accts.chk.getRate() ); //all relevant info for a checking acct
 
     if (accts.sav.getStatus() == "Permanently Closed")
     {
-        savInfo = "CLOSED SAVINGS ACCOUNT";
+        savInfo = "CLOSED SAVINGS ACCOUNT"; //will never have more info
     }
     else
     {
-        savInfo = accts.sav.getActNum() + " " + to_string( accts.sav.getBal() ) + " " + to_string( accts.chk.getRate() );
-        savInfo += " " + accts.sav.getStatus();
+        savInfo = accts.sav.getActNum() + " " + to_string( accts.sav.getBal() ) + " " + to_string( accts.chk.getRate() ); 
+        savInfo += " " + accts.sav.getStatus(); //all relevant savings account info
     }
     
 
-    return chkInfo + "\n" + savInfo;
+    return (chkInfo + "\n" + savInfo); //returns a string that will cover two lines in a text file
 }
 
+//determines if a user's input is valid for depositing or withdrawing
 bool validateInput(string inputNum)
 {
     double num = stod(inputNum);
@@ -71,11 +74,12 @@ bool validateInput(string inputNum)
     }    
 }
 
+//Search act vector using an actNum, find index of account set
 int findAcctIndex(vector<Accounts> vect, string actNum)
 {
     for (int i = 0; i < vect.size(); i++)
     {
-        if ( (actNum == vect[i].chk.getActNum()) || (actNum == vect[i].sav.getActNum()) )
+        if ( (actNum == vect[i].chk.getActNum()) || (actNum == vect[i].sav.getActNum()) ) //used OR since actNum can start with C or S
         {
             return i;
         }
@@ -83,10 +87,11 @@ int findAcctIndex(vector<Accounts> vect, string actNum)
     return -1; //only hit if never found act num
 }
 
+//Increments the global variable for next act num
 void incrementActNum(string lastActNum = "")
 {
     int num = 0;
-    if (lastActNum == "")
+    if (lastActNum == "") //i.e. there are no pre-existing accounts
     {
         num = stoi(INITIAL_ACCT_NUM);
     }
@@ -113,15 +118,16 @@ void incrementActNum(string lastActNum = "")
     INITIAL_ACCT_NUM = firstPartOfNum + to_string(num);
 }
 
+//Reads a .txt file for pre-existing account info
 vector<Accounts> getInfo()
 {
-    vector<Accounts> acctVect = {};
+    vector<Accounts> acctVect = {}; //initial vector to be returned, no elements
     ifstream inputFile;
-    inputFile.open("TotallyNotBankInfo.txt");
+    inputFile.open("TotallyNotBankInfo.txt"); //our safe and trustworthy database of account info
 
     if (!inputFile) //i.e. no bank info to read
     {
-        return acctVect;
+        return acctVect; 
     }
 
     else  //i.e. there is bank info saved
@@ -141,24 +147,25 @@ vector<Accounts> getInfo()
             acctVect.push_back(accSet); //adding the struct object to the vector
         }
 
-        inputFile.close(); //done reading, so this can be closed
-        return acctVect;
+        inputFile.close(); //done reading, so file can be closed
+        return acctVect; //return our newly minted vector with acct info
     }
 }
 
+//Writes account info into a totally safe .txt file
 void saveInfo(vector<Accounts> acctVect)
 {
     ofstream outFile;
-    outFile.open("TotallyNotBankInfo.txt");
+    outFile.open("TotallyNotBankInfo.txt"); //this will rewrite our 100% secure database entirely, i.e. open with trunc
 
     for (int i=0; i < acctVect.size(); i++)
     {
-        outFile << getAccountInfo(acctVect[i]) << endl;
+        outFile << getAccountInfo(acctVect[i]) << endl; //writes two lines of the txt file at a time, one for chk info and the other for sav info
     }
-
-    outFile.close();
+    outFile.close(); //done writing, so close the file
 }
 
+//Used to help create CheckingAccount objects from a line of text
 CheckingAccount createChkFromInfo(string info)
 {
     string actNum = info.substr(0, info.find(" ")); //slicing out act Num
@@ -177,13 +184,14 @@ CheckingAccount createChkFromInfo(string info)
     return acct; //return newly minted checking account object
 }
 
+//Same as above but with a SavingsAccount object
 SavingsAccount createSavFromInfo(string info)
 {
     if (info == "CLOSED SAVINGS ACCOUNT")
     {
         SavingsAccount acct = SavingsAccount();
         acct.setStatus(3);
-        return acct;
+        return acct; //the permanently closed status will prevent all future editing, so this should never again be changed
     }
     else
     {    
