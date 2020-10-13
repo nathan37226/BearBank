@@ -69,9 +69,14 @@ string SavingsAccount::getStatus()
 
 string SavingsAccount::deposit(double amount)
 {
+	if (status == "Permanently Closed")
+	{
+		string inactive = "Error, this account has been closed and is no longer active" << endl;
+		return inactive;
+	}
 	try
 	{
-		if (amount < 0.01)
+		if(amount < 0.01)
 		{
 			string error = "Invalid arguement: you cannot deposit a negative amount";
 			throw error;
