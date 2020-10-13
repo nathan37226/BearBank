@@ -18,7 +18,6 @@ public:
 	void closeAcc();
     string getStatus();
     void setStatus(int option);
-	void setSerCharge(double charge);
 };
 
 SavingsAccount::SavingsAccount(string actNum, double bal, double rate) : BankAccount(actNum, bal, rate)
@@ -71,7 +70,7 @@ string SavingsAccount::deposit(double amount)
 {
 	if (status == "Permanently Closed")
 	{
-		string inactive = "Error, this account has been closed and is no longer active" << endl;
+		string inactive = "Error, this account has been closed and is no longer active.";
 		return inactive;
 	}
 	try
@@ -138,8 +137,22 @@ string SavingsAccount::withdraw(double amount)
 			setStatus(2);
 		}
 	}
+<<<<<<< HEAD
 
 	if (status == "Active")
+=======
+	if (status == "Inactive")
+	{
+		newStatus = "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account.";
+		return newStatus;		//returns status of the account, discards the withdrawl
+	}
+	else if (status == "Permanently Closed")
+	{
+		newStatus = "There is less than $1.00 in the account, it has been permanently closed.";
+		return newStatus;		//returns status of the account, discards the withdrawl
+	}
+	else 
+>>>>>>> 76d7d5a8a691b4d868c46ded780da4fe6a1ff214
 	{
 		setBal(newBal);
 	}
