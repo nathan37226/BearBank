@@ -129,6 +129,9 @@ string CheckingAccount::withdraw(double amount)
             nsfCharge(); //this will technically allow for infinite nsf fee's, so there should be a stop implemented sometime
             setRisk(2);
         }
+        string amnt = to_string(amount);
+        amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
+        return "You do not have suffient funds to withdraw $" + amnt + ".\nYou have incurred a $25.00 non-sufficent fund fee.";
     }
     else
     {

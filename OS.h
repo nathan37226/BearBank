@@ -139,7 +139,6 @@ vector<Accounts> getInfo()
             Accounts accSet; //now need to copy data froms strings into struct attributes
             CheckingAccount check = createChkFromInfo(chkLine); //creates checking act from line
             SavingsAccount saving = createSavFromInfo(savLine); //same with next line
-
             accSet.chk = check; //adding new accts to struct
             accSet.sav = saving;
 
