@@ -76,7 +76,7 @@ inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &
 
     if ( (actNum.substr(0, 1) == "S") && (status == "Inactive") )
     {
-        cout << "Your savings account is inactive!\nIts balance must reach above 50.00 before withdrawing is enabled." << endl;
+        cout << "Your savings account is inactive!\nIts balance must reach 50.00 before withdrawing is enabled." << endl;
     }
     else //either checking or an active saving
     {
@@ -165,13 +165,13 @@ inline int findAcctIndex(vector<Accounts> vect, const string &actNum)
 //Reads a .txt file for pre-existing account info
 inline vector<Accounts> getInfo()
 {
-    vector<Accounts> acctVect = {}; //initial vector to be returned, no elements
+    vector<Accounts> acctVect; //initial vector to be returned, no elements
     ifstream inputFile;
     inputFile.open("TotallyNotBankInfo.txt"); //our safe and trustworthy database of account info
 
     if (!inputFile) //i.e. no bank info to read
     {
-        return acctVect; 
+        return acctVect;
     }
 
     else  //i.e. there is bank info saved
@@ -269,9 +269,7 @@ inline SavingsAccount createSavFromInfo(string info)
 inline int daysElapsed(time_t &previousTime)
 {
     time_t currentTime = time(0);
-    cout << "Current time: " << currentTime << endl;
-    long int secondsElapsed = (currentTime - (1602288000));
-    ///long int secondsElapsed = (currentTime - previousTime);
+    long int secondsElapsed = (currentTime - previousTime);
 
     int days = secondsElapsed / 86400; //86400 seconds in a day, and the int type of day will round like a floor function;
     return days;
@@ -294,8 +292,7 @@ inline time_t midnightTimeStamp(time_t curTime)
 inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime)
 {
     int daysPassed = daysElapsed(previousTime);
-
-    if (daysPassed != 0) //only ever calculate interest if at least 1 day has elapsed
+    if (daysPassed > 0) //only ever calculate interest if at least 1 day has elapsed
     {
         for (int day = 0; day < daysPassed; day++) //for each day that interest needs to be accrewed
         {

@@ -42,7 +42,7 @@ public:
     static void incrementActNum(string lastActNum);
 };
 string BankAccount::CURRENT_ACCT_NUM = "00001"; //initial value, means there can be up to 99999 distinct accounts
-time_t BankAccount::LAST_INT_CALCULATION = time(0); //in implementation, this will always be some day at midnight
+time_t BankAccount::LAST_INT_CALCULATION; //in implementation, this will always be some day at midnight
 
 void BankAccount::performSerCharge()
 {

@@ -10,12 +10,21 @@ using namespace std;
 
 int main()
 {   
-    vector<Accounts> acctVect = {Accounts()}; //essentially a default initialization
-    acctVect = getInfo(); //gets any existing info, if present
+    vector<Accounts> acctVect = getInfo(); //gets any info if present, otherwise returns am empty vect
 
     string mainInterface = "\n[1] Open an account\n[2] Login to an account\n[3] Exit bank\n";
     string accountInterface = "\n[1] Make a deposit\n[2] Make a withdrawl";
-    BankAccount::incrementActNum( acctVect[acctVect.size()-1].chk.getActNum() ); //uses last acct num from .txt file to generate next num
+    
+    if (acctVect.size() > 0)
+    {
+        saveInfo(acctVect); //computes initial interest and saves to .txt file. Worst case, it will exactly rewrite existing contents in .txt file
+        BankAccount::incrementActNum( acctVect[acctVect.size()-1].chk.getActNum() ); //uses last acct num from .txt file to generate next num
+    }
+    else
+    {
+        BankAccount::LAST_INT_CALCULATION = midnightTimeStamp(time(0)); //since nothing in vector, no current timestamp. this initializes it to be the current day at midnight
+    }
+    
 
     while (true) //main while loop
     {
@@ -114,9 +123,9 @@ int main()
                             break;
                         }
                     }
+                    displayBalance(acctVect, actNum, index); //displays user's balance after withdraw or deposit
+                    saveInfo(acctVect); //just in case of premature exit of program, info is still saved
                 }
-                displayBalance(acctVect, actNum, index); //displays user's balance after withdraw or deposit
-                saveInfo(acctVect); //just in case of premature exit of program, info is still saved
             }
 
             case 3: //Exit BearBank
