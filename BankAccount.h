@@ -16,7 +16,6 @@ private:
     double intRate;
     double serCharge;
 
-
 public:
     BankAccount(){}
     BankAccount(string actNum, double bal, double rate);

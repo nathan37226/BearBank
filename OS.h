@@ -29,7 +29,6 @@ inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime);
 inline time_t midnightTimeStamp();
 
 
-
 //displays user's balance
 inline void displayBalance(vector<Accounts> &acctVect, const string &actNum, const int &index)
 {
@@ -104,25 +103,6 @@ inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &
     }
 }
 
-//returns all info about a set of accounts as a string
-inline string getAccountInfo(Accounts &accts)
-{
-    string chkInfo = "", savInfo = "";
-    chkInfo = accts.chk.getActNum() + " " + to_string( accts.chk.getBal() ) + " " + to_string( accts.chk.getRate() ); //all relevant info for a checking acct
-
-    if (accts.sav.getStatus() == "Permanently Closed")
-    {
-        savInfo = "CLOSED SAVINGS ACCOUNT"; //will never have more info
-    }
-    else
-    {
-        savInfo = accts.sav.getActNum() + " " + to_string( accts.sav.getBal() ) + " " + to_string( accts.sav.getRate() ); 
-        savInfo += " " + accts.sav.getStatus(); //all relevant savings account info
-    }
-    
-    return (chkInfo + "\n" + savInfo); //returns a string that will cover two lines in a text file
-}
-
 //determines if a user's input is valid for depositing or withdrawing
 inline bool validateInput(const string &inputNum)
 {
@@ -162,6 +142,8 @@ inline int findAcctIndex(vector<Accounts> vect, const string &actNum)
     return -1; //only hit if never found act num
 }
 
+
+
 //Reads a .txt file for pre-existing account info
 inline vector<Accounts> getInfo()
 {
@@ -195,6 +177,25 @@ inline vector<Accounts> getInfo()
         inputFile.close(); //done reading, so file can be closed
         return acctVect; //return our newly minted vector with acct info
     }
+}
+
+//returns all info about a set of accounts as a string
+inline string getAccountInfo(Accounts &accts)
+{
+    string chkInfo = "", savInfo = "";
+    chkInfo = accts.chk.getActNum() + " " + to_string( accts.chk.getBal() ) + " " + to_string( accts.chk.getRate() ); //all relevant info for a checking acct
+
+    if (accts.sav.getStatus() == "Permanently Closed")
+    {
+        savInfo = "CLOSED SAVINGS ACCOUNT"; //will never have more info
+    }
+    else
+    {
+        savInfo = accts.sav.getActNum() + " " + to_string( accts.sav.getBal() ) + " " + to_string( accts.sav.getRate() ); 
+        savInfo += " " + accts.sav.getStatus(); //all relevant savings account info
+    }
+    
+    return (chkInfo + "\n" + savInfo); //returns a string that will cover two lines in a text file
 }
 
 //Writes account info into a totally safe .txt file
@@ -264,6 +265,8 @@ inline SavingsAccount createSavFromInfo(string info)
         return acct;
     }
 }
+
+
 
 //finding time elapsed since last interest application
 inline int daysElapsed(time_t &previousTime)
