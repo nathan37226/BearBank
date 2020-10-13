@@ -45,11 +45,10 @@ string getAccountInfo(Accounts accts)
     }
     else
     {
-        savInfo = accts.sav.getActNum() + " " + to_string( accts.sav.getBal() ) + " " + to_string( accts.chk.getRate() ); 
+        savInfo = accts.sav.getActNum() + " " + to_string( accts.sav.getBal() ) + " " + to_string( accts.sav.getRate() ); 
         savInfo += " " + accts.sav.getStatus(); //all relevant savings account info
     }
     
-
     return (chkInfo + "\n" + savInfo); //returns a string that will cover two lines in a text file
 }
 
