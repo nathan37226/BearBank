@@ -92,11 +92,12 @@ string SavingsAccount::deposit(double amount)
 
 string SavingsAccount::withdraw(double amount)
 {
+	string newStatus;
 	try
 	{
 		if (amount < 0.01)
 		{
-			string error = "Invalid Arguement: cannot withdraw less than $0.00";
+			string error = "Invalid Arguement: cannot withdraw less than $0.01";
 			throw error;
 		}
 	}
@@ -115,15 +116,29 @@ string SavingsAccount::withdraw(double amount)
 		if (getBal() < 1.00)
 		{
 			setStatus(3);
-			cout << "There is less than $1.00 in the account, it has been permanently closed. " << endl;
 		}
 		else
 		{
 			setStatus(2);
-			cout << "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account" << endl;
 		}
 	}
-    return "not implemented";
+	if (status == "Inactive")
+	{
+		newStatus = "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account" << endl;
+		return newStatus;
+	}
+	else if (status == "Permanently Closed")
+	{
+		newStatus = "There is less than $1.00 in the account, it has been permanently closed. " << endl;
+		return newStatus;
+	}
+	else 
+	{
+		setBal(newBal);
+	}
+	string amnt = to_string(amount);
+	amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
+	return "You have withdrawn $" + amnt + " from you account.";
 }
 
 void SavingsAccount::closeAcc()
