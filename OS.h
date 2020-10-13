@@ -14,10 +14,9 @@ struct Accounts
     SavingsAccount sav;
 };
 
-inline string displayNum(const double &input);
 inline void displayBalance(vector<Accounts> &acctVect, const string &actNum, const int &index);
-inline vector<Accounts> userDeposit(vector<Accounts> &acctVect, string &actNum, const int &index, const double &amount);
-inline vector<Accounts> userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &index);
+inline void userDeposit(vector<Accounts> &acctVect, string &actNum, const int &index);
+inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &index);
 inline string getAccountInfo(Accounts &accts);
 inline bool validateInput(const string &inputNum);
 inline int findAcctIndex(vector<Accounts> vect, const string &actNum);
@@ -29,45 +28,47 @@ inline SavingsAccount createSavFromInfo(string info);
 
 string CURRENT_ACCT_NUM = "00001"; //global variable for acct num, means there can be up to 100000 distinct accounts
 
-//used to display a double properly in conjunction with cout
-inline string displayNum(const double &input)
-{
-    string num = to_string(input);
-    return num.substr(0, num.length() - 4); //cuts off the last 0000 of the double
-}
-
 //displays user's balance
 inline void displayBalance(vector<Accounts> &acctVect, const string &actNum, const int &index)
 {
     if (actNum.substr(0, 1) == "C")
     {
-        cout << "Your account has a balance of: $" + displayNum(acctVect[index].chk.getBal()) << endl;
+        cout << "Your account has a balance of: $" + BankAccount::displayNum(acctVect[index].chk.getBal()) << endl;
     }
     else
     {
-        cout << "Your account has a balance of: $" + displayNum(acctVect[index].sav.getBal()) << endl;
+        cout << "Your account has a balance of: $" + BankAccount::displayNum(acctVect[index].sav.getBal()) << endl;
     }
 }
 
 //simulating a user making a deposit
-inline vector<Accounts> userDeposit(vector<Accounts> &acctVect, string &actNum, const int &index, const double &amount)
+inline void userDeposit(vector<Accounts> &acctVect, string &actNum, const int &index)
 {
-    string message = "";
-    if (actNum.substr(0, 1) == "C") //into checking
+    string amount = "";
+    cout << "Enter an amount to deposit: ";
+    getline(cin, amount);
+    if ( !validateInput(amount) )
     {
-        message = acctVect[index].chk.deposit(amount);
-        cout << message << endl;
+        cout << "Invalid number entered!" << endl;
     }
-    else //into saving
+    else
     {
-        message = acctVect[index].sav.deposit(amount);
-        cout << message << endl;
+        string message = "";
+        if (actNum.substr(0, 1) == "C") //into checking
+        {
+            message = acctVect[index].chk.deposit( stod(amount));
+            cout << message << endl;
+        }
+        else //into saving
+        {
+            message = acctVect[index].sav.deposit( stod(amount) );
+            cout << message << endl;
+        }
     }
-    return acctVect;
 }
 
 //simulating a user making a withdrawl
-inline vector<Accounts> userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &index)
+inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &index)
 {
     //FIND IF STATUS WILL ALLOW WITHDRAW!!!
     string status = acctVect[index].sav.getStatus();
@@ -75,7 +76,6 @@ inline vector<Accounts> userWithdraw(vector<Accounts> &acctVect, string &actNum,
     if ( (actNum.substr(0, 1) == "S") && (status == "Inactive") )
     {
         cout << "Your savings account is inactive!\nIts balance must reach above 50.00 before withdrawing is enabled." << endl;
-        return acctVect;
     }
 
     string amount = "";
@@ -97,7 +97,6 @@ inline vector<Accounts> userWithdraw(vector<Accounts> &acctVect, string &actNum,
         message = acctVect[index].sav.withdraw(stod(amount));
         cout << message << endl;
     }
-    return acctVect;
 }
 
 //returns all info about a set of accounts as a string

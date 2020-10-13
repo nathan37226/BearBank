@@ -110,39 +110,37 @@ string SavingsAccount::withdraw(double amount)
 		cout << err << endl;
 	}
 
-	double newBal = getBal() - amount;
-
-	if (newBal < 50.0)
+	if (status == "Inactive")
 	{
-		setSerCharge(5.0);
-		performSerCharge();
-		
-		if (getBal() < 1.00)
+		return "No withdrawls can be made until this account has a balance of at least $50.00";
+	}
+
+	else
+	{
+		double newBal = getBal() - amount; //bal after withdraw
+		if (newBal < 50.0)
 		{
-			setStatus(3);
+			setSerCharge(5.0);
+			performSerCharge(); //charges the $5.00 fee for dropping below $50.00
+			
+			if (getBal() < 1.00)
+			{
+				setStatus(3); //permanently closing the acct
+				return "Your balance has dropped below $1.00.\nThe account has been permanently closed.";
+			}
+			else
+			{
+				setStatus(2); //setting acct as inactive
+				return "Your balance has dropped below $50.00.\nThe account has been set to inactive.\nDeposit to resume activity.";
+			}
 		}
 		else
 		{
-			setStatus(2);
+			setBal(newBal); //everything is fine at this point
 		}
+		
 	}
-	if (status == "Inactive")
-	{
-		newStatus = "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account.";
-		return newStatus;		//returns status of the account, discards the withdrawl
-	}
-	else if (status == "Permanently Closed")
-	{
-		newStatus = "There is less than $1.00 in the account, it has been permanently closed.";
-		return newStatus;		//returns status of the account, discards the withdrawl
-	}
-	else 
-	{
-		setBal(newBal);
-	}
-	string amnt = to_string(amount);
-	amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
-	return "You have withdrawn $" + amnt + " from you account.";
+	return "You have withdrawn $" + BankAccount::displayNum(amount) + " from you account.";
 }
 
 void SavingsAccount::closeAcc()

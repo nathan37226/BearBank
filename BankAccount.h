@@ -5,6 +5,7 @@ Group Members: Nathan Obert M03134502, Keegan Maynard
 #define BANKACCOUNT_H
 #include <string>
 #include <cmath>
+#include <iostream>
 using namespace std;
 
 class BankAccount
@@ -31,17 +32,13 @@ public:
     string getActNum();
     void setBal(double bal);
     double getBal();
+    void setRate(double rate);
     double getRate();
     void setSerCharge(double charge);
+    static string displayNum(double input);
+
 
 };
-
-BankAccount::BankAccount(string actNum, double bal, double rate)
-{
-    accountNum = actNum;
-    balance = bal;
-    intRate = rate;
-}
 
 void BankAccount::performSerCharge()
 {
@@ -93,6 +90,26 @@ double BankAccount::getBal()
     return balance;
 }
 
+void BankAccount::setRate(double rate)
+{
+    try
+    {
+        if ( (rate > 10.00) || (rate < 0.10) )
+        {
+            throw 1;
+        }
+        else
+        {
+            intRate = rate;
+        }
+    }
+    catch (int a)
+    {
+        cout << "Invalid rate\n";
+    }
+
+}
+
 double BankAccount::getRate()
 {
     return intRate;
@@ -101,6 +118,20 @@ double BankAccount::getRate()
 void BankAccount::setSerCharge(double charge)
 {
     serCharge = charge;
+}
+
+BankAccount::BankAccount(string actNum, double bal, double rate)
+{
+    setActNum(actNum);
+    setBal(bal);
+    setRate(rate);
+}
+
+//used to display a double properly in conjunction with cout
+string BankAccount::displayNum(double input)
+{
+    string num = to_string(input);
+    return num.substr(0, num.length() - 4); //cuts off the last 0000 of the double
 }
 
 #endif

@@ -53,7 +53,7 @@ int main()
                 CheckingAccount newChkAcct = CheckingAccount(chkNum, 5.00, 0.5); //creating the checking acct
                 SavingsAccount newSavAcct = SavingsAccount(savNum, 50.00, 1.5); //same with savings acct
                 newSavAcct.setStatus(1); //making it active
-                cout << "Rate: " << newSavAcct.getRate() << endl;
+                
                 Accounts newSet; //struct object to store the two new accts
                 newSet.chk = newChkAcct;
                 newSet.sav = newSavAcct;
@@ -100,22 +100,12 @@ int main()
                     {
                         case 1: //making a deposit
                         {
-                            cout << "Enter an amount to deposit: ";
-                            getline(cin, amount);
-                            if ( !validateInput(amount) )
-                            {
-                                cout << "Invalid number entered!" << endl;
-                            }
-                            else
-                            {
-                                acctVect = userDeposit(acctVect, actNum, index, stod(amount));
-                            }
-                            
+                            userDeposit(acctVect, actNum, index);
                             break;
                         }
                         case 2: //making a withdrawl
                         {
-                            acctVect = userWithdraw(acctVect, actNum, index);                          
+                            userWithdraw(acctVect, actNum, index);                          
                             break;
                         }
                         default:
@@ -142,11 +132,9 @@ int main()
             }
         }
 
-        if (option == 3)
+        if (option == 3) //break condition for while loop
             break;
     }
-
-
 
     return 0;
 }
