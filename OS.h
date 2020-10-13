@@ -14,30 +14,30 @@ struct Accounts
     SavingsAccount sav;
 };
 
-inline string displayNum(double input);
-inline void displayBalance(vector<Accounts> acctVect, string actNum, int index);
-inline vector<Accounts> userDeposit(vector<Accounts> acctVect, string actNum, int index, double amount);
-inline vector<Accounts> userWithdraw(vector<Accounts> acctVect, string actNum, int index);
-inline string getAccountInfo(Accounts accts);
-inline bool validateInput(string inputNum);
-inline int findAcctIndex(vector<Accounts> vect, string actNum);
+inline string displayNum(const double &input);
+inline void displayBalance(vector<Accounts> &acctVect, const string &actNum, const int &index);
+inline vector<Accounts> userDeposit(vector<Accounts> &acctVect, string &actNum, const int &index, const double &amount);
+inline vector<Accounts> userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &index);
+inline string getAccountInfo(Accounts &accts);
+inline bool validateInput(const string &inputNum);
+inline int findAcctIndex(vector<Accounts> vect, const string &actNum);
 inline void incrementActNum(string lastActNum);
 inline vector<Accounts> getInfo();
-inline void saveInfo(vector<Accounts> acctVect);
+inline void saveInfo(vector<Accounts> &acctVect);
 inline CheckingAccount createChkFromInfo(string info);
 inline SavingsAccount createSavFromInfo(string info);
 
 string CURRENT_ACCT_NUM = "00001"; //global variable for acct num, means there can be up to 100000 distinct accounts
 
 //used to display a double properly in conjunction with cout
-inline string displayNum(double input)
+inline string displayNum(const double &input)
 {
     string num = to_string(input);
     return num.substr(0, num.length() - 4); //cuts off the last 0000 of the double
 }
 
 //displays user's balance
-inline void displayBalance(vector<Accounts> acctVect, string actNum, int index)
+inline void displayBalance(vector<Accounts> &acctVect, const string &actNum, const int &index)
 {
     if (actNum.substr(0, 1) == "C")
     {
@@ -50,7 +50,7 @@ inline void displayBalance(vector<Accounts> acctVect, string actNum, int index)
 }
 
 //simulating a user making a deposit
-inline vector<Accounts> userDeposit(vector<Accounts> acctVect, string actNum, int index, double amount)
+inline vector<Accounts> userDeposit(vector<Accounts> &acctVect, string &actNum, const int &index, const double &amount)
 {
     string message = "";
     if (actNum.substr(0, 1) == "C") //into checking
@@ -67,9 +67,17 @@ inline vector<Accounts> userDeposit(vector<Accounts> acctVect, string actNum, in
 }
 
 //simulating a user making a withdrawl
-inline vector<Accounts> userWithdraw(vector<Accounts> acctVect, string actNum, int index)
+inline vector<Accounts> userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &index)
 {
     //FIND IF STATUS WILL ALLOW WITHDRAW!!!
+    string status = acctVect[index].sav.getStatus();
+
+    if ( (actNum.substr(0, 1) == "S") && (status == "Inactive") )
+    {
+        cout << "Your savings account is inactive!\nIts balance must reach above 50.00 before withdrawing is enabled." << endl;
+        return acctVect;
+    }
+
     string amount = "";
     cout << "Enter an amount to withdraw: ";
     getline(cin, amount);
@@ -81,19 +89,19 @@ inline vector<Accounts> userWithdraw(vector<Accounts> acctVect, string actNum, i
     string message = "";
     if (actNum.substr(0, 1) == "C") //from checking acct
     {
-        message = acctVect[index].chk.withdraw(amount);
+        message = acctVect[index].chk.withdraw(stod(amount));
         cout << message << endl;
     }
     else //from saving acct
     {
-        message = acctVect[index].sav.withdraw(amount);
+        message = acctVect[index].sav.withdraw(stod(amount));
         cout << message << endl;
     }
     return acctVect;
 }
 
 //returns all info about a set of accounts as a string
-inline string getAccountInfo(Accounts accts)
+inline string getAccountInfo(Accounts &accts)
 {
     string chkInfo = "", savInfo = "";
     chkInfo = accts.chk.getActNum() + " " + to_string( accts.chk.getBal() ) + " " + to_string( accts.chk.getRate() ); //all relevant info for a checking acct
@@ -112,7 +120,7 @@ inline string getAccountInfo(Accounts accts)
 }
 
 //determines if a user's input is valid for depositing or withdrawing
-inline bool validateInput(string inputNum)
+inline bool validateInput(const string &inputNum)
 {
     double num = stod(inputNum);
     if (num < 0.01) //cannot withdraw or deposit less than a cent
@@ -133,7 +141,7 @@ inline bool validateInput(string inputNum)
 }
 
 //Search act vector using an actNum, find index of account set
-inline int findAcctIndex(vector<Accounts> vect, string actNum)
+inline int findAcctIndex(vector<Accounts> vect, const string &actNum)
 {
     for (int i = 0; i < vect.size(); i++)
     {
@@ -215,7 +223,7 @@ inline vector<Accounts> getInfo()
 }
 
 //Writes account info into a totally safe .txt file
-inline void saveInfo(vector<Accounts> acctVect)
+inline void saveInfo(vector<Accounts> &acctVect)
 {
     ofstream outFile;
     outFile.open("TotallyNotBankInfo.txt"); //this will rewrite our 100% secure database entirely, i.e. open with trunc
