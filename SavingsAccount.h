@@ -18,6 +18,7 @@ public:
 	void closeAcc();
     string getStatus();
     void setStatus(int option);
+	void setSerCharge(double charge);
 };
 
 SavingsAccount::SavingsAccount(string actNum, double bal, double rate) : BankAccount(actNum, bal, rate)
@@ -50,7 +51,7 @@ void SavingsAccount::setStatus(int option)
 			}
 			default:
 			{
-				string error = "Invalid arguement: setStatus expects 1 or 2, got passed the value " + to_string(option);
+				string error = "Invalid arguement: setStatus expects 1, 2, or 3, got passed the value " + to_string(option);
 				throw error;
 			}
 		}
@@ -106,18 +107,22 @@ string SavingsAccount::withdraw(double amount)
 
 	double newBal = getBal() - amount;
 
-	/*if (newBal < 50.0)
+	if (newBal < 50.0)
 	{
-		//charge 5 fee
+		setSerCharge(5.0);
+		performSerCharge();
+		
 		if (getBal() < 1.00)
 		{
-			//close
+			setStatus(3);
+			cout << "There is less than $1.00 in the account, it has been permanently closed. " << endl;
 		}
 		else
 		{
-			//set status as inactive
+			setStatus(2);
+			cout << "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account" << endl;
 		}
-	}*/
+	}
     return "not implemented";
 }
 
