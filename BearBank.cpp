@@ -59,7 +59,7 @@ int main()
                 newSet.sav = newSavAcct;
                 acctVect.push_back(newSet); //adding new accts to vect
 
-                saveInfo(); //in case of premature exit of program, info is still saved
+                saveInfo(acctVect); //in case of premature exit of program, info is still saved
                 break;
             }
 
@@ -70,22 +70,15 @@ int main()
                 getline(cin, actNum);
                 int index = findAcctIndex(acctVect, actNum);
 
-                if (index == -1)
+                if (index == -1) //acount does not exist
                 {
                     cout << "Account not found!" << endl;
                 }
 
                 else //account exists, so deposit or withdraw
                 {
-                    if (actNum.substr(0, 1) == "C")
-                    {
-                        cout << "Your account has a balance of: $" + displayNum(acctVect[index].chk.getBal()) << endl;
-                    }
-                    else
-                    {
-                        cout << "Your account has a balance of: $" + displayNum(acctVect[index].sav.getBal()) << endl;
-                    }
-                    
+                    displayBalance(acctVect, actNum, index); //displays user's balance
+    
                     cout << accountInterface << endl; //displays options for an acct
                     getline(cin, input);
 
@@ -103,7 +96,6 @@ int main()
                     }
 
                     string amount = "";
-                    string message = "";
                     switch (option)
                     {
                         case 1: //making a deposit
@@ -114,36 +106,16 @@ int main()
                             {
                                 cout << "Invalid number entered!" << endl;
                             }
-                            else if (actNum.substr(0, 1) == "C") //into checking
+                            else
                             {
-                                message = acctVect[index].chk.deposit( stod(amount) );
-                                cout << message << endl;
+                                acctVect = userDeposit(acctVect, actNum, index, stod(amount));
                             }
-                            else //into saving
-                            {
-                                message = acctVect[index].sav.deposit( stod(amount) );
-                                cout << message << endl;
-                            }
+                            
                             break;
                         }
                         case 2: //making a withdrawl
                         {
-                            cout << "Enter an amount to withdraw: ";
-                            getline(cin, amount);
-                            if ( !validateInput(amount) )
-                            {
-                                cout << "Invalid number entered!" << endl;
-                            }
-                            else if (actNum.substr(0, 1) == "C")
-                            {
-                                message = acctVect[index].chk.withdraw( stod(amount) );
-                                cout << message << endl;
-                            }
-                            else
-                            {
-                                message = acctVect[index].sav.withdraw( stod(amount) );
-                                cout << message << endl;
-                            }
+                            acctVect = userWithdraw(acctVect, actNum, index);                          
                             break;
                         }
                         default:
@@ -153,6 +125,7 @@ int main()
                         }
                     }
                 }
+                displayBalance(acctVect, actNum, index); //displays user's balance after withdraw or deposit
                 saveInfo(acctVect); //just in case of premature exit of program, info is still saved
             }
 
