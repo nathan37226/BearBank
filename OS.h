@@ -24,6 +24,10 @@ inline vector<Accounts> getInfo();
 inline void saveInfo(vector<Accounts> &acctVect);
 inline CheckingAccount createChkFromInfo(string info);
 inline SavingsAccount createSavFromInfo(string info);
+inline int daysElapsed(time_t &previousTime);
+inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime);
+inline time_t midnightTimeStamp();
+
 
 
 //displays user's balance
@@ -255,4 +259,44 @@ inline SavingsAccount createSavFromInfo(string info)
     }
 }
 
+//finding time elapsed since last interest application
+inline int daysElapsed(time_t &previousTime)
+{
+    time_t currentTime = time(0);
+    cout << "Current time: " << currentTime << endl;
+    long int secondsElapsed = (currentTime - (1602288000));
+    ///long int secondsElapsed = (currentTime - previousTime);
+
+    int days = secondsElapsed / 86400; //86400 seconds in a day, and the int type of day will round like a floor function;
+    return days;
+}
+
+//tail recursive function to return unix timestamp of current time at midnight, used for timestamp on .txt file
+inline time_t midnightTimeStamp(time_t curTime)
+{
+    if (curTime <= 86400)
+    {
+        return (time(0) - curTime); //returns how many seconds have elapsed in the current day
+    }
+    else
+    {  
+        return midnightTimeStamp(curTime-86400); //subtracts one day off
+    }
+}
+
+//takes how many days have passed since last computation of interest and performs daily int caluclations
+inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime)
+{
+    int daysPassed = daysElapsed(previousTime);
+
+    for (int day = 0; day < daysPassed; day++) //for each day that interest needs to be accrewed
+    {
+        for (int index = 0; index < acctVect.size(); index++) //for each set of accounts in the vector
+        {
+            acctVect[index].chk.calcInt(); //adds daily interst onto balance
+            acctVect[index].sav.calcInt();
+        }
+    }
+    BankAccount::LAST_INT_CALCULATION = midnightTimeStamp(time(0)); //updates time to midnight of current day
+}
 #endif

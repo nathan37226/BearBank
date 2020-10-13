@@ -37,11 +37,12 @@ public:
     void setSerCharge(double charge);
     static string displayNum(double input);
 
-    static string CURRENT_ACCT_NUM; //global variable for acct num, means there can be up to 100000 distinct accounts
+    static string CURRENT_ACCT_NUM; //global variable for acct num
+    static time_t LAST_INT_CALCULATION;
     static void incrementActNum(string lastActNum);
-
 };
-string BankAccount::CURRENT_ACCT_NUM = "00001"; //initial value
+string BankAccount::CURRENT_ACCT_NUM = "00001"; //initial value, means there can be up to 99999 distinct accounts
+time_t BankAccount::LAST_INT_CALCULATION = time(0); //initial value of the current unix time
 
 void BankAccount::performSerCharge()
 {
@@ -67,7 +68,7 @@ double BankAccount::roundNum(double value, int decimal)
 
 void BankAccount::calcInt()
 {
-    double dailyIntRate = intRate / 365; //maybe change in future to account for leap years
+    double dailyIntRate = intRate / 365;
     double dailyInt = dailyIntRate * balance;
     balance = roundNum(balance + dailyInt, 2); //private member function to round to a given amount of decimals
 }
@@ -97,7 +98,7 @@ void BankAccount::setRate(double rate)
 {
     try
     {
-        if ( (rate > 10.00) || (rate < 0.10) )
+        if ( (rate > 10.00) || (rate < 0.10) ) //these are specifically for the sav account, but there's no reason to also not restrict on checking acct
         {
             throw 1;
         }

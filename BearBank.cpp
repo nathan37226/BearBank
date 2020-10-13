@@ -5,17 +5,25 @@ Group Members: Nathan Obert M03134502, Keegan Maynard
 #include "OS.h"
 #include <string>
 #include <vector>
+#include <ctime>
 using namespace std;
 
 int main()
+{
+    // current date/time based on current system
+    time_t currentTime = time(0);
+    vector<Accounts> vect = {Accounts()};
+    vect = getInfo();
+}
+
+/*int main()
 {   
-    vector<Accounts> acctVect = {Accounts()}; //makes size be 1, used for increment acct Num
+    vector<Accounts> acctVect = {Accounts()}; //essentially a default initialization
     acctVect = getInfo(); //gets any existing info, if present
 
     string mainInterface = "\n[1] Open an account\n[2] Login to an account\n[3] Exit bank\n";
     string accountInterface = "\n[1] Make a deposit\n[2] Make a withdrawl";
-    BankAccount::incrementActNum( acctVect[acctVect.size()-1].chk.getActNum() );
-
+    BankAccount::incrementActNum( acctVect[acctVect.size()-1].chk.getActNum() ); //uses last acct num from .txt file to generate next num
 
     while (true) //main while loop
     {
@@ -24,7 +32,7 @@ int main()
         int option = -1;
         getline(cin, input);
 
-        try
+        try //validating input
         {
             if (input.length() == 1)
                 option = stoi(input); //Since stoi will make "2a" become 2, ensuring the length is 1 prevents this type of invalid input, also same with negative numbers
@@ -36,6 +44,7 @@ int main()
             cout << "Invalid option!" << endl;
             continue;
         }
+        
         switch (option)
         {
             case 1: //open new accounts
@@ -78,7 +87,6 @@ int main()
                 else //account exists, so deposit or withdraw
                 {
                     displayBalance(acctVect, actNum, index); //displays user's balance
-    
                     cout << accountInterface << endl; //displays options for an acct
                     getline(cin, input);
 
@@ -100,7 +108,7 @@ int main()
                     {
                         case 1: //making a deposit
                         {
-                            userDeposit(acctVect, actNum, index);
+                            userDeposit(acctVect, actNum, index); //abstracted to make code more readable
                             break;
                         }
                         case 2: //making a withdrawl
@@ -108,7 +116,7 @@ int main()
                             userWithdraw(acctVect, actNum, index);                          
                             break;
                         }
-                        default:
+                        default: //bad option
                         {
                             cout << "Invalid Option!" << endl;
                             break;
@@ -125,7 +133,7 @@ int main()
                 break;
             }
 
-            default:
+            default: //bad option entered
             {
                 cout << "Invalid option!" << endl;
                 break;
@@ -138,3 +146,4 @@ int main()
 
     return 0;
 }
+*/
