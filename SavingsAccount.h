@@ -98,6 +98,17 @@ string SavingsAccount::deposit(double amount)
 string SavingsAccount::withdraw(double amount)
 {
 	string newStatus;
+
+	if (status == "Inactive")
+	{
+		newStatus = "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account" << endl;
+		return newStatus;		//returns status of the account, discards the withdrawl
+	}
+	else if (status == "Permanently Closed")
+	{
+		newStatus = "There is less than $1.00 in the account, it has been permanently closed. " << endl;
+		return newStatus;		//returns status of the account, discards the withdrawl
+	}
 	try
 	{
 		if (amount < 0.01)
@@ -127,20 +138,12 @@ string SavingsAccount::withdraw(double amount)
 			setStatus(2);
 		}
 	}
-	if (status == "Inactive")
-	{
-		newStatus = "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account" << endl;
-		return newStatus;		//returns status of the account, discards the withdrawl
-	}
-	else if (status == "Permanently Closed")
-	{
-		newStatus = "There is less than $1.00 in the account, it has been permanently closed. " << endl;
-		return newStatus;		//returns status of the account, discards the withdrawl
-	}
-	else 
+
+	if (status == "Active")
 	{
 		setBal(newBal);
 	}
+	
 	string amnt = to_string(amount);
 	amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
 	return "You have withdrawn $" + amnt + " from you account.";
