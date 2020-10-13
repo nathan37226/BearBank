@@ -72,7 +72,7 @@ string CheckingAccount::deposit(double amount)
 {
     try
     {
-        if (amount < 0.0)
+        if (amount < 0.01)
         {
             string error = "Invalid argument: you cannot deposit a negative amount";
             throw error;
@@ -129,17 +129,13 @@ string CheckingAccount::withdraw(double amount)
             nsfCharge(); //this will technically allow for infinite nsf fee's, so there should be a stop implemented sometime
             setRisk(2);
         }
-        string amnt = to_string(amount);
-        amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
-        return "You do not have suffient funds to withdraw $" + amnt + ".\nYou have incurred a $25.00 non-sufficent fund fee.";
+        return "You do not have suffient funds to withdraw $" + displayNum(amount) + ".\nYou have incurred a $25.00 non-sufficent fund fee.";
     }
     else
     {
-        setBal(newBal);
+        setBal(newBal); //no fees to charge, so this is a good withdrawl
     }
-    string amnt = to_string(amount);
-    amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
-    return "You have withdrawn $" + amnt + " from you account.";
+    return "You have withdrawn $" + displayNum(amount) + " from you account.";
 }
 
 void CheckingAccount::closeAcc()

@@ -14,7 +14,7 @@ int main()
 
     string mainInterface = "\n[1] Open an account\n[2] Login to an account\n[3] Exit bank\n";
     string accountInterface = "\n[1] Make a deposit\n[2] Make a withdrawl";
-    incrementActNum( acctVect[acctVect.size()-1].chk.getActNum() );
+    BankAccount::incrementActNum( acctVect[acctVect.size()-1].chk.getActNum() );
 
 
     while (true) //main while loop
@@ -41,9 +41,9 @@ int main()
             case 1: //open new accounts
             {
                 string chkNum = "", savNum = "";
-                chkNum = "C" + CURRENT_ACCT_NUM;
-                savNum = "S" + CURRENT_ACCT_NUM;
-                incrementActNum(); //used that num, so need to prepare for next number
+                chkNum = "C" + BankAccount::CURRENT_ACCT_NUM;
+                savNum = "S" + BankAccount::CURRENT_ACCT_NUM;
+                BankAccount::incrementActNum(); //used that num, so need to prepare for next number
 
                 cout << "Your account numbers are " << chkNum << " and " << savNum << " for your ";
                 cout << "new Checking Account and Savings Account, respectively." << endl;
@@ -53,7 +53,7 @@ int main()
                 CheckingAccount newChkAcct = CheckingAccount(chkNum, 5.00, 0.5); //creating the checking acct
                 SavingsAccount newSavAcct = SavingsAccount(savNum, 50.00, 1.5); //same with savings acct
                 newSavAcct.setStatus(1); //making it active
-                
+
                 Accounts newSet; //struct object to store the two new accts
                 newSet.chk = newChkAcct;
                 newSet.sav = newSavAcct;

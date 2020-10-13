@@ -37,8 +37,11 @@ public:
     void setSerCharge(double charge);
     static string displayNum(double input);
 
+    static string CURRENT_ACCT_NUM; //global variable for acct num, means there can be up to 100000 distinct accounts
+    static void incrementActNum(string lastActNum);
 
 };
+string BankAccount::CURRENT_ACCT_NUM = "00001"; //initial value
 
 void BankAccount::performSerCharge()
 {
@@ -134,4 +137,34 @@ string BankAccount::displayNum(double input)
     return num.substr(0, num.length() - 4); //cuts off the last 0000 of the double
 }
 
+//Increments the global variable for next act num
+void BankAccount::incrementActNum(string lastActNum = "")
+{
+    int num = 0;
+    if (lastActNum == "") //i.e. there are no pre-existing accounts
+    {
+        num = stoi(CURRENT_ACCT_NUM);
+    }
+    else
+    {
+        num = stoi( lastActNum.substr(1, string::npos) ); //used if there are currently existing accts
+    }
+    
+    int count = 0;
+    int numCopy = num; //copying value into new var
+    while (numCopy >= 1)
+    {
+        numCopy /= 10;
+        count++; //count, upon end of while loop, will represent the highest power of 10, i.e. whether in the ones, tens, hundreds, etc
+    }
+    
+    string firstPartOfNum = "";
+    while ( (firstPartOfNum.length() + count) < 5) //five digits total in act num template
+    {
+        firstPartOfNum += "0";
+    }
+    num += 1;
+
+    CURRENT_ACCT_NUM = firstPartOfNum + to_string(num);
+}
 #endif

@@ -20,13 +20,11 @@ inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &
 inline string getAccountInfo(Accounts &accts);
 inline bool validateInput(const string &inputNum);
 inline int findAcctIndex(vector<Accounts> vect, const string &actNum);
-inline void incrementActNum(string lastActNum);
 inline vector<Accounts> getInfo();
 inline void saveInfo(vector<Accounts> &acctVect);
 inline CheckingAccount createChkFromInfo(string info);
 inline SavingsAccount createSavFromInfo(string info);
 
-string CURRENT_ACCT_NUM = "00001"; //global variable for acct num, means there can be up to 100000 distinct accounts
 
 //displays user's balance
 inline void displayBalance(vector<Accounts> &acctVect, const string &actNum, const int &index)
@@ -70,14 +68,13 @@ inline void userDeposit(vector<Accounts> &acctVect, string &actNum, const int &i
 //simulating a user making a withdrawl
 inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &index)
 {
-    //FIND IF STATUS WILL ALLOW WITHDRAW!!!
     string status = acctVect[index].sav.getStatus();
 
     if ( (actNum.substr(0, 1) == "S") && (status == "Inactive") )
     {
         cout << "Your savings account is inactive!\nIts balance must reach above 50.00 before withdrawing is enabled." << endl;
     }
-    else
+    else //either checking or an active saving
     {
         string amount = "";
         cout << "Enter an amount to withdraw: ";
@@ -86,17 +83,19 @@ inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &
         {
             cout << "Invalid number entered!" << endl;
         }
-
-        string message = "";
-        if (actNum.substr(0, 1) == "C") //from checking acct
+        else //a proper number entered
         {
-            message = acctVect[index].chk.withdraw(stod(amount));
-            cout << message << endl;
-        }
-        else //from saving acct
-        {
-            message = acctVect[index].sav.withdraw(stod(amount));
-            cout << message << endl;
+            string message = "";
+            if (actNum.substr(0, 1) == "C") //for checking
+            {
+                message = acctVect[index].chk.withdraw( stod(amount) );
+                cout << message << endl;
+            }
+            else //for active saving
+            {
+                message = acctVect[index].sav.withdraw( stod(amount) );
+                cout << message << endl;
+            }
         }
     }
 }
@@ -157,37 +156,6 @@ inline int findAcctIndex(vector<Accounts> vect, const string &actNum)
         }
     }
     return -1; //only hit if never found act num
-}
-
-//Increments the global variable for next act num
-inline void incrementActNum(string lastActNum = "")
-{
-    int num = 0;
-    if (lastActNum == "") //i.e. there are no pre-existing accounts
-    {
-        num = stoi(CURRENT_ACCT_NUM);
-    }
-    else
-    {
-        num = stoi( lastActNum.substr(1, string::npos) ); //used if there are currently existing accts
-    }
-    
-    int count = 0;
-    int numCopy = num; //copying value into new var
-    while (numCopy >= 1)
-    {
-        numCopy /= 10;
-        count++; //count, upon end of while loop, will represent the highest power of 10, i.e. whether in the ones, tens, hundreds, etc
-    }
-    
-    string firstPartOfNum = "";
-    while ( (firstPartOfNum.length() + count) < 5) //five digits total in act num template
-    {
-        firstPartOfNum += "0";
-    }
-    num += 1;
-
-    CURRENT_ACCT_NUM = firstPartOfNum + to_string(num);
 }
 
 //Reads a .txt file for pre-existing account info
