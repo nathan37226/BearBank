@@ -176,7 +176,9 @@ inline vector<Accounts> getInfo()
 
     else  //i.e. there is bank info saved
     {
-        string chkLine = "", savLine = "";
+        string chkLine = "", savLine = "", lastIntTime = "";
+        getline(inputFile, lastIntTime);
+        BankAccount::LAST_INT_CALCULATION = stoi(lastIntTime.substr( lastIntTime.find(" ") + 1, string::npos) ); //converts the unix time saved inside .txt file to an int
 
         while (getline(inputFile, chkLine))
         {
@@ -198,8 +200,12 @@ inline vector<Accounts> getInfo()
 //Writes account info into a totally safe .txt file
 inline void saveInfo(vector<Accounts> &acctVect)
 {
+    computeInterest(acctVect, time(0)); //when info is saved, need to make sure interest is up to date
+
     ofstream outFile;
     outFile.open("TotallyNotBankInfo.txt"); //this will rewrite our 100% secure database entirely, i.e. open with trunc
+
+    outFile << "Timestamp: " << BankAccount::LAST_INT_CALCULATION << endl;
 
     for (int i=0; i < acctVect.size(); i++)
     {
@@ -271,7 +277,7 @@ inline int daysElapsed(time_t &previousTime)
     return days;
 }
 
-//tail recursive function to return unix timestamp of current time at midnight, used for timestamp on .txt file
+//tail-recursive function to return unix timestamp of current time at midnight, used for timestamp on .txt file
 inline time_t midnightTimeStamp(time_t curTime)
 {
     if (curTime <= 86400)
@@ -289,14 +295,17 @@ inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime)
 {
     int daysPassed = daysElapsed(previousTime);
 
-    for (int day = 0; day < daysPassed; day++) //for each day that interest needs to be accrewed
+    if (daysPassed != 0) //only ever calculate interest if at least 1 day has elapsed
     {
-        for (int index = 0; index < acctVect.size(); index++) //for each set of accounts in the vector
+        for (int day = 0; day < daysPassed; day++) //for each day that interest needs to be accrewed
         {
-            acctVect[index].chk.calcInt(); //adds daily interst onto balance
-            acctVect[index].sav.calcInt();
+            for (int index = 0; index < acctVect.size(); index++) //for each set of accounts in the vector
+            {
+                acctVect[index].chk.calcInt(); //adds daily interst onto balance
+                acctVect[index].sav.calcInt();
+            }
         }
+        BankAccount::LAST_INT_CALCULATION = midnightTimeStamp(time(0)); //updates time to midnight of current day
     }
-    BankAccount::LAST_INT_CALCULATION = midnightTimeStamp(time(0)); //updates time to midnight of current day
 }
 #endif

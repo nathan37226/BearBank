@@ -9,14 +9,6 @@ Group Members: Nathan Obert M03134502, Keegan Maynard
 using namespace std;
 
 int main()
-{
-    // current date/time based on current system
-    time_t currentTime = time(0);
-    vector<Accounts> vect = {Accounts()};
-    vect = getInfo();
-}
-
-/*int main()
 {   
     vector<Accounts> acctVect = {Accounts()}; //essentially a default initialization
     acctVect = getInfo(); //gets any existing info, if present
@@ -146,4 +138,3 @@ int main()
 
     return 0;
 }
-*/
