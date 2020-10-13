@@ -58,6 +58,8 @@ int main()
                 newSet.chk = newChkAcct;
                 newSet.sav = newSavAcct;
                 acctVect.push_back(newSet); //adding new accts to vect
+
+                saveInfo(); //in case of premature exit of program, info is still saved
                 break;
             }
 
