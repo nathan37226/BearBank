@@ -41,7 +41,21 @@ int main()
         {
             case 1: //open new accounts
             {
-                ;
+                string chkNum = "", savNum = "";
+                chkNum = "C" + CURRENT_ACCT_NUM;
+                savNum = "S" + CURRENT_ACCT_NUM;
+                incrementActNum(); //used that num, so need to prepare for next number
+                cout << "Your account numbers are " << chkNum << " and " << savNum << " for your ";
+                cout << " new Checking Account and Savings Account, respectively." << endl;
+                cout << "Your Checking Account, " << chkNum << ", has an initial balance of $5.00 with an interest rate of 0.5%" << endl;
+                cout << "Your Savings Account, " << savNum << ", has an initial balance of $50.00 with an interst rate of 1.5%" << endl;
+                
+                CheckingAccount newChkAcct = CheckingAccount(chkNum, 5.00, 0.5); //creating the checking acct
+                SavingsAccount newSavAcct = SavingsAccount(savNum, 50.00, 1.5); //same with savings acct
+                Accounts newSet; //struct object to store the two new accts
+                newSet.chk = newChkAcct;
+                newSet.sav = newSavAcct;
+                acctVect.push_back(newSet); //adding new accts to vect
             }
 
             case 2: //login to accounts
@@ -51,7 +65,14 @@ int main()
 
             case 3: //Exit BearBank
             {
-                ;
+                saveInfo(acctVect); //send account info to be saved into the oh so safe .txt file
+                break;
+            }
+
+            default:
+            {
+                cout << "Invalid option!" << endl;
+                break;
             }
         }
 

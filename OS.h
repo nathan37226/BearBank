@@ -24,7 +24,7 @@ void saveInfo(vector<Accounts> acctVect);
 CheckingAccount createChkFromInfo(string info);
 SavingsAccount createSavFromInfo(string info);
 
-string INITIAL_ACCT_NUM = "00001"; //global variable for acct num, means there can be up to 100000 distinct accounts
+string CURRENT_ACCT_NUM = "00001"; //global variable for acct num, means there can be up to 100000 distinct accounts
 
 //used to display a double properly in conjunction with cout
 string displayNum(double input)
@@ -93,7 +93,7 @@ void incrementActNum(string lastActNum = "")
     int num = 0;
     if (lastActNum == "") //i.e. there are no pre-existing accounts
     {
-        num = stoi(INITIAL_ACCT_NUM);
+        num = stoi(CURRENT_ACCT_NUM);
     }
     else
     {
@@ -115,7 +115,7 @@ void incrementActNum(string lastActNum = "")
     }
     num += 1;
 
-    INITIAL_ACCT_NUM = firstPartOfNum + to_string(num);
+    CURRENT_ACCT_NUM = firstPartOfNum + to_string(num);
 }
 
 //Reads a .txt file for pre-existing account info
