@@ -125,12 +125,12 @@ string SavingsAccount::withdraw(double amount)
 	if (status == "Inactive")
 	{
 		newStatus = "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account" << endl;
-		return newStatus;
+		return newStatus;		//returns status of the account, discards the withdrawl
 	}
 	else if (status == "Permanently Closed")
 	{
 		newStatus = "There is less than $1.00 in the account, it has been permanently closed. " << endl;
-		return newStatus;
+		return newStatus;		//returns status of the account, discards the withdrawl
 	}
 	else 
 	{
