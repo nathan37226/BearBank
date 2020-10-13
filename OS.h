@@ -77,25 +77,27 @@ inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &
     {
         cout << "Your savings account is inactive!\nIts balance must reach above 50.00 before withdrawing is enabled." << endl;
     }
+    else
+    {
+        string amount = "";
+        cout << "Enter an amount to withdraw: ";
+        getline(cin, amount);
+        if ( !validateInput(amount) )
+        {
+            cout << "Invalid number entered!" << endl;
+        }
 
-    string amount = "";
-    cout << "Enter an amount to withdraw: ";
-    getline(cin, amount);
-    if ( !validateInput(amount) )
-    {
-        cout << "Invalid number entered!" << endl;
-    }
-
-    string message = "";
-    if (actNum.substr(0, 1) == "C") //from checking acct
-    {
-        message = acctVect[index].chk.withdraw(stod(amount));
-        cout << message << endl;
-    }
-    else //from saving acct
-    {
-        message = acctVect[index].sav.withdraw(stod(amount));
-        cout << message << endl;
+        string message = "";
+        if (actNum.substr(0, 1) == "C") //from checking acct
+        {
+            message = acctVect[index].chk.withdraw(stod(amount));
+            cout << message << endl;
+        }
+        else //from saving acct
+        {
+            message = acctVect[index].sav.withdraw(stod(amount));
+            cout << message << endl;
+        }
     }
 }
 

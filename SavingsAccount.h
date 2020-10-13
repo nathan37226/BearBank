@@ -10,6 +10,8 @@ class SavingsAccount : public BankAccount
 private:
 	string status;
 
+	void updateStatus();
+
 public:
     SavingsAccount(){}
 	SavingsAccount(string actNum, double bal, double rate);
@@ -66,6 +68,14 @@ string SavingsAccount::getStatus()
     return status;
 }
 
+void SavingsAccount::updateStatus()
+{
+	if (getBal() >= 50.00)
+	{
+		setStatus(1);
+	}
+}
+
 string SavingsAccount::deposit(double amount)
 {
 	if (status == "Permanently Closed")
@@ -73,25 +83,27 @@ string SavingsAccount::deposit(double amount)
 		string inactive = "Error, this account has been closed and is no longer active.";
 		return inactive;
 	}
-	try
+	else
 	{
-		if(amount < 0.01)
+		try
 		{
-			string error = "Invalid arguement: you cannot deposit a negative amount";
-			throw error;
+			if(amount < 0.01)
+			{
+				string error = "Invalid arguement: you cannot deposit a negative amount";
+				throw error;
+			}
+			else
+			{
+				setBal(getBal() + amount);
+			}
 		}
-		else
+		catch (string err)
 		{
-			setBal(getBal() + amount);
+			cout << err << endl;
 		}
+		updateStatus(); //if >= $50.00, then status is active
+		return "You have successfully deposited $" + displayNum(amount) + " into your account.";
 	}
-	catch (string err)
-	{
-		cout << err << endl;
-	}
-    string amnt = to_string(amount);
-    amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
-    return "You have successfully deposited $" + amnt + " into your account.";
 }
 
 string SavingsAccount::withdraw(double amount)
@@ -126,19 +138,20 @@ string SavingsAccount::withdraw(double amount)
 			if (getBal() < 1.00)
 			{
 				setStatus(3); //permanently closing the acct
-				return "Your balance has dropped below $1.00.\nThe account has been permanently closed.";
+				setBal(newBal); //charging the bad withdraw attempt
+				return "You have withdrawn $" + BankAccount::displayNum(amount) + " from you account.\nYour balance has dropped below $1.00.\nThe account has been permanently closed.";
 			}
 			else
 			{
 				setStatus(2); //setting acct as inactive
-				return "Your balance has dropped below $50.00.\nThe account has been set to inactive.\nDeposit to resume activity.";
+				setBal(newBal); //charging the withdraw
+				return "You have withdrawn $" + BankAccount::displayNum(amount) + " from you account.\nYour balance has dropped below $50.00.\nThe account has been set to inactive.\nDeposit to resume activity.";
 			}
 		}
 		else
 		{
 			setBal(newBal); //everything is fine at this point
 		}
-		
 	}
 	return "You have withdrawn $" + BankAccount::displayNum(amount) + " from you account.";
 }
