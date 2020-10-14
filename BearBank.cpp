@@ -58,7 +58,7 @@ int main()
                 cout << "Your account numbers are " << chkNum << " and " << savNum << " for your ";
                 cout << "new Checking Account and Savings Account, respectively." << endl;
                 cout << "Your Checking Account, " << chkNum << ", has an initial balance of $5.00 with an interest rate of 0.5%" << endl;
-                cout << "Your Savings Account, " << savNum << ", has an initial balance of $50.00 with an interst rate of 1.5%" << endl;
+                cout << "Your Savings Account, " << savNum << ", has an initial balance of $50.00 with an interest rate of 1.5%" << endl;
                 
                 CheckingAccount newChkAcct = CheckingAccount(chkNum, 5.00, 0.5); //creating the checking acct
                 SavingsAccount newSavAcct = SavingsAccount(savNum, 50.00, 1.5); //same with savings acct
