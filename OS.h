@@ -201,7 +201,7 @@ inline string getAccountInfo(Accounts &accts)
 //Writes account info into a totally safe .txt file
 inline void saveInfo(vector<Accounts> &acctVect)
 {
-    computeInterest(acctVect, time(0)); //when info is saved, need to make sure interest is up to date
+    computeInterest(acctVect, BankAccount::LAST_INT_CALCULATION); //when info is saved, need to make sure interest is up to date
 
     ofstream outFile;
     outFile.open("TotallyNotBankInfo.txt"); //this will rewrite our 100% secure database entirely, i.e. open with trunc
@@ -272,7 +272,7 @@ inline SavingsAccount createSavFromInfo(string info)
 inline int daysElapsed(time_t &previousTime)
 {
     time_t currentTime = time(0);
-    long int secondsElapsed = (currentTime - previousTime);
+    time_t secondsElapsed = currentTime - previousTime;
 
     int days = secondsElapsed / 86400; //86400 seconds in a day, and the int type of day will round like a floor function;
     return days;

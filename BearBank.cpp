@@ -2,6 +2,10 @@
 Group Members: Nathan Obert M03134502, Keegan Maynard 
 */
 #include "OS.h"
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
 using namespace std;
 
 int main()
