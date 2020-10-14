@@ -40,7 +40,7 @@ int main()
             else
                 throw 1; //just throwing any int here to be caught later
         }
-        catch (int a)
+        catch (...)
         {
             cout << "Invalid option!" << endl;
             continue;
