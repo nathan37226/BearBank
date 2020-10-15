@@ -1,23 +1,16 @@
 /*
-<<<<<<< HEAD
-Group Members: Nathan Obert M03134502, Keegan Maynard 
-=======
 Group Members: Nathan Obert M03134502 and Keegan Maynard M03114078
 This header file is the parent class for the SavingsAccount and CheckingAccount, and includes common members and methods such as balance, 
 interest rate, service charges, and status of the account (closed or open). This header file includes a public constructor to initialize 
 the accounts with default values, public methods to deposit or withdraw, as well as other methods to perform service charges, calculate 
 interest, round the values of the account, and open or close the account. The BankAccount header file was not used to compute much, if any, 
 of the mathematics for the savings or checking accounts, but was used to store common members and methods that both header files would need. 
->>>>>>> OS
 */
 #ifndef BANKACCOUNT_H
 #define BANKACCOUNT_H
 #include <string>
 #include <cmath>
-<<<<<<< HEAD
-=======
 #include <iostream>
->>>>>>> OS
 using namespace std;
 
 class BankAccount
@@ -27,28 +20,16 @@ private:
     double balance;
     double intRate;
     double serCharge;
-<<<<<<< HEAD
-
-    double roundNum(double value, int decimal);
-=======
     bool isClosed;
->>>>>>> OS
 
 public:
     BankAccount(){}
     BankAccount(string actNum, double bal, double rate);
-<<<<<<< HEAD
-    virtual void deposit(double amount) = 0;
-    virtual void withdraw(double amount) = 0;
-    void calcInt();
-    void yearlyCharge();
-=======
     virtual string deposit(double amount) = 0;
     virtual string withdraw(double amount) = 0;
     void calcInt();
     void performSerCharge();
     void yearlyCharge(double amount);
->>>>>>> OS
     virtual void closeAcc() = 0;
 
     //setter and getter functs, for derived class use
@@ -56,23 +37,6 @@ public:
     string getActNum();
     void setBal(double bal);
     double getBal();
-<<<<<<< HEAD
-    double getRate();
-    void setSerCharge(double charge);
-
-};
-
-BankAccount::BankAccount(string actNum, double bal, double rate)
-{
-    accountNum = actNum;
-    balance = bal;
-    intRate = rate;
-}
-
-void BankAccount::yearlyCharge()
-{
-    balance -= serCharge; //check for once in a calendar year!
-=======
     void setRate(double rate);
     double getRate();
     void setSerCharge(double charge);
@@ -115,7 +79,6 @@ void BankAccount::yearlyCharge(double amount)
         setSerCharge(amount); //amount is whatever the yearly charge happens to be
         performSerCharge();
     }
->>>>>>> OS
 }
 
 double BankAccount::roundNum(double value, int decimal)
@@ -137,18 +100,12 @@ double BankAccount::roundNum(double value, int decimal)
 
 void BankAccount::calcInt()
 {
-<<<<<<< HEAD
-    double dailyIntRate = intRate / 365; //maybe change in future to account for leap years
-    double dailyInt = dailyIntRate * balance;
-    balance = roundNum(balance + dailyInt, 2); //private member function to round to a given amount of decimals
-=======
     if ( (balance > 0) && (!isClosed) ) //negative accounts dont get interest, and interst on 0 is 0--also has to be open to get interest
     {   
         double dailyIntRate = intRate / 365;
         double dailyInt = dailyIntRate * balance;
         balance = roundNum(balance + dailyInt, 2); //private member function to round to a given amount of decimals
     }
->>>>>>> OS
 }
 
 //Setter and Getter functions
@@ -172,8 +129,6 @@ double BankAccount::getBal()
     return balance;
 }
 
-<<<<<<< HEAD
-=======
 void BankAccount::setRate(double rate)
 {
     try
@@ -194,7 +149,6 @@ void BankAccount::setRate(double rate)
     }
 }
 
->>>>>>> OS
 double BankAccount::getRate()
 {
     return intRate;
@@ -205,8 +159,6 @@ void BankAccount::setSerCharge(double charge)
     serCharge = charge;
 }
 
-<<<<<<< HEAD
-=======
 void BankAccount::setIsClosed(bool yes)
 {
     isClosed = (yes == true) ? true : false;
@@ -256,5 +208,4 @@ void BankAccount::incrementActNum(string lastActNum = "")
 
 }
 
->>>>>>> OS
 #endif
