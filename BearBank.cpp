@@ -1,5 +1,12 @@
 /*
-Group Members: Nathan Obert M03134502, Keegan Maynard 
+Group Members: Nathan Obert M03134502 and Keegan Maynard M03114078
+This CPP contians the prompts and controls for user interface. All of the code is included in a single function, and much of it is included in a while loop
+so that the program will loop until the user decides to end the program. 
+The file begins be attempting to fill the accounts vector, and if there is information already in the vector it saves it to the text file. If there are no
+accounts to add to the vector, the time stamp is initialized to the current time. Then the main function calls a while loop that displays the user
+interface and gathers user input to determine what functions to call using a case-switch option. If the user enters option one, the program creates an 
+account, if option two is entered, the program allows the user to log into the account, and if option three is entered, the program logs out of the banking
+system and breaks the while loop. 
 */
 #include "OS.h"
 #include <iostream>
