@@ -27,7 +27,7 @@ inline SavingsAccount createSavFromInfo(string info);
 inline int daysElapsed(time_t &previousTime);
 inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime);
 inline time_t midnightTimeStamp();
-void performYearlyCharge(vector<Accounts> &acctVect, double serCharge);
+inline void performYearlyCharge(vector<Accounts> &acctVect, double serCharge);
 
 
 //displays user's balance
@@ -315,25 +315,25 @@ inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime)
 }
 
 //if yearly charges are enabled, this function will perform them if needed
-void performYearlyCharge(vector<Accounts> &acctVect, double serCharge)
+inline void performYearlyCharge(vector<Accounts> &acctVect, double serCharge)
 {
     if (BankAccount::yearlyChargeEnabled) //only if enabled
     {
         time_t t = time(0);
         tm *curTime = localtime(&t);
         int currentYear = curTime->tm_year; //how many years since 1900, so for 2020 would be 120 years
-        int numOfYears = currentYear - BankAccount::LAST_YEARLY_CHARGE;
+        int yearDifference = currentYear - BankAccount::LAST_YEARLY_CHARGE;
 
-        if ( numOfYears > 0) //only if a year has passed does this occur
+        if ( yearDifference > 0) //only if a year has passed does this occur
         {
-            for (int years = 0; years < numOfYears; years++) //for each year
+            for (int years = 0; years < yearDifference; years++) //for each year
             {
                 for (int i = 0; i < acctVect.size(); i++) //for each set of accounts
                 {
                     acctVect[i].sav.yearlyCharge(serCharge); //only gets charged to savings account
                 }
             }
-            BankAccount::LAST_YEARLY_CHARGE = currentYear; //only if year has passed does it need to be updated
+            BankAccount::LAST_YEARLY_CHARGE = currentYear; //updating value to match
         }
     }
 }
