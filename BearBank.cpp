@@ -80,19 +80,27 @@ int main()
                 cout << "Enter an account number: ";
                 getline(cin, actNum);
 
+                bool isChecking = (actNum.substr(0,1) == "C") ? true : false; //determines if referencing a checking or saving acct
                 int index = findAcctIndex(acctVect, actNum);
 
                 if (index == -1) //acount does not exist
                 {
                     cout << "Account not found!" << endl;
                 }
-                else if (acctVect[index].sav.getStatus() == "Permanently-Closed")
+                else if ( (actNum.substr(0, 1) == "S") && (acctVect[index].sav.getStatus() == "Permanently-Closed") )
                 {
                     cout << "That account has been permanently closed due to a balance of less than $1.00" << endl;
                 }
-                else //account exists, so deposit or withdraw
+                else if ( (isChecking) && (!acctVect[index].chk.isOpen()) ) //if it's a closed checking
                 {
-                    cout << acctVect[index].sav.getStatus() << endl;
+                    cout << "Your checking accout has been closed." << endl;
+                }
+                else if ( (!isChecking) && (!acctVect[index].sav.isOpen()) ) //if it's a closed saving
+                {
+                    cout << "Your saving account has been closed." << endl;
+                }
+                else //account exists, so deposit or withdraw, and if a saving, the acct is not perm closed
+                {
                     cout << accountInterface; //displays options for an acct
                     getline(cin, input);
 

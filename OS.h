@@ -83,7 +83,7 @@ inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &
     {
         cout << "Your savings account has been permanently closed due to a balance of less than $1.00" << endl;
     }
-
+    
     else //either checking or an active saving
     {
         string amount = "";
