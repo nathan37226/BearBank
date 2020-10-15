@@ -99,7 +99,7 @@ int main()
                 {
                     cout << "Your saving account has been closed." << endl;
                 }
-                else //account exists, so deposit or withdraw, and if a saving, the acct is not perm closed
+                else //account exists and is open, so display options
                 {
                     cout << accountInterface; //displays options for an acct
                     getline(cin, input);
