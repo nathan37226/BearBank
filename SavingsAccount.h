@@ -45,7 +45,8 @@ void SavingsAccount::setStatus(int option)
 			}
 			case 3:
 			{
-				status = "Permanently Closed";
+				status = "Permanently-Closed";
+				setIsClosed(true);
 				break;
 			}
 			default:
@@ -69,10 +70,6 @@ string SavingsAccount::deposit(double amount)
 {
 	if (isOpen())
 	{
-		if (status == "Permanently Closed")
-		{
-			return "Error, this account has been closed and is no longer active.\n";
-		}
 		try
 		{
 			if (amount < 0.01)
@@ -97,7 +94,15 @@ string SavingsAccount::deposit(double amount)
 	}
 	else
 	{
-		return "The account is currently closed\n";
+		if (status == "Permanently-Closed")
+		{
+			return "Error, this account has been permanently closed.\n";
+		}
+		else
+		{
+			return "This account is currently closed.";
+		}
+		
 	}
 }
 
@@ -109,10 +114,6 @@ string SavingsAccount::withdraw(double amount)
 		if (status == "Inactive")
 		{
 			return "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account\n";		//returns status of the account, discards the withdrawl
-		}
-		else if (status == "Permanently Closed")
-		{
-			return "There is less than $1.00 in the account, it has been permanently closed.\n";		//returns status of the account, discards the withdrawl
 		}
 		else //active
 		{
@@ -150,7 +151,15 @@ string SavingsAccount::withdraw(double amount)
 	}
 	else
 	{
-		return "The account is currently closed\n";
+		if (status == "Permanently-Closed")
+		{
+			return "There is less than $1.00 in the account, it has been permanently closed.\n"; //returns status of the account, discards the withdrawl
+		}
+		else
+		{
+			return "The account is currently closed\n";
+		}
+		
 	}
 	
 }

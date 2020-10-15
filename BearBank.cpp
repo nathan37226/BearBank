@@ -86,9 +86,13 @@ int main()
                 {
                     cout << "Account not found!" << endl;
                 }
-
+                else if (acctVect[index].sav.getStatus() == "Permanently-Closed")
+                {
+                    cout << "That account has been permanently closed due to a balance of less than $1.00" << endl;
+                }
                 else //account exists, so deposit or withdraw
                 {
+                    cout << acctVect[index].sav.getStatus() << endl;
                     cout << accountInterface; //displays options for an acct
                     getline(cin, input);
 

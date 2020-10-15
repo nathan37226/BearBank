@@ -79,7 +79,7 @@ inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &
     {
         cout << "Your savings account's balance must reach 50.00 before withdrawing is enabled." << endl;
     }
-    else if (status == "Permanently Closed")
+    else if (status == "Permanently-Closed")
     {
         cout << "Your savings account has been permanently closed due to a balance of less than $1.00" << endl;
     }
@@ -193,16 +193,26 @@ inline vector<Accounts> getInfo()
 inline string getAccountInfo(Accounts &accts)
 {
     string chkInfo = "", savInfo = "";
-    chkInfo = accts.chk.getActNum() + " " + to_string( accts.chk.getBal() ) + " " + to_string( accts.chk.getRate() ); //all relevant info for a checking acct
 
-    if (accts.sav.getStatus() == "Permanently Closed")
+    chkInfo = accts.chk.getActNum() + " " + to_string( accts.chk.getBal() ) + " " + to_string( accts.chk.getRate() ); //all relevant info for a checking acct
+    if (accts.chk.isOpen()) //if open, returns true
     {
-        savInfo = "CLOSED SAVINGS ACCOUNT"; //will never have more info
+        chkInfo += " Open";
     }
     else
     {
-        savInfo = accts.sav.getActNum() + " " + to_string( accts.sav.getBal() ) + " " + to_string( accts.sav.getRate() ); 
-        savInfo += " " + accts.sav.getStatus(); //all relevant savings account info
+        chkInfo += " Closed";
+    }
+
+    savInfo = accts.sav.getActNum() + " " + to_string( accts.sav.getBal() ) + " " + to_string( accts.sav.getRate() ); 
+    savInfo += " " + accts.sav.getStatus(); //all relevant savings account info
+    if (accts.sav.isOpen()) //if open, returns true
+    {
+        savInfo += " Open";
+    }
+    else
+    {
+        savInfo += " Closed";
     }
     
     return (chkInfo + "\n" + savInfo); //returns a string that will cover two lines in a text file
@@ -233,7 +243,8 @@ inline CheckingAccount createChkFromInfo(string info)
     info = info.substr(info.find(" ") + 1, string::npos);
     double bal = stod( info.substr(0, info.find(" ")) ); //getting balance as a double
     info = info.substr(info.find(" ") + 1, string::npos);
-    double rate = stod( info ); //getting rate as a double
+    double rate = stod( info.substr(0, info.find(" ")) ); //getting rate as a double
+    info = info.substr(info.find(" ") + 1, string::npos);
 
     CheckingAccount acct = CheckingAccount(actNum, bal, rate); //creating account with sliced info
 
@@ -241,6 +252,15 @@ inline CheckingAccount createChkFromInfo(string info)
     {
         acct.setRisk(2); //ensures the priv member 'flag' is properly set
     }
+    if (info == "Closed")
+    {
+        acct.setIsClosed(true);
+    }
+    else
+    {
+        acct.setIsClosed(false);
+    }
+    
 
     return acct; //return newly minted checking account object
 }
@@ -262,17 +282,34 @@ inline SavingsAccount createSavFromInfo(string info)
         info = info.substr(info.find(" ") + 1, string::npos);
         double rate = stod( info.substr(0, info.find(" ")) ); //getting rate as a double
         info = info.substr(info.find(" ") + 1, string::npos);
-        //info is now just the status of the act
+        string status = info.substr(0, info.find(" "));
+        info = info.substr(info.find(" ") + 1, string::npos);
+        //info is now just whether teh account is open
         SavingsAccount acct = SavingsAccount(actNum, bal, rate); //creating return object
 
-        if (info == "Active")
+        if (status == "Active")
         {
             acct.setStatus(1); //changing status member to match
         }
-        else
+        else if (status == "Inactive")
         {
             acct.setStatus(2);
         }
+        else
+        {
+            acct.setStatus(3); //permanently closed
+        }
+        
+        if (info == "Closed")
+        {
+            acct.setIsClosed(true);
+        }
+        else
+        {
+            acct.setIsClosed(false);
+        }
+        
+
         return acct;
     }
 }
