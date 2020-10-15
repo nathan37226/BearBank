@@ -1,5 +1,11 @@
 /*
-Group Members: Nathan Obert M03134502, Keegan Maynard 
+Group Members: Nathan Obert M03134502 and Keegan Maynard M03114078
+This header file controls the checking account operations for BearBank.cpp. This header file is a child of the BankAccount header file, and inherits some
+of its members and functions. The CheckingAccount header file includes private members to store the risk of an account and a charge for a negative account balance, 
+public methods to initialize the account, deposit and withdraw money, closs the account, and set the risk, as well as a constructor to initialize the account
+and inherit some members from the BankAccount header file. 
+All of these methods and members are used to keep track of the balance of the account, allow the user to add or remove money from the account, charge a fee
+if the account has a negative balance, set the risk of large deposits, and close the account. 
 */
 #ifndef CHECKINGACCOUNT_H
 #define CHECKINGACCOUNT_H
