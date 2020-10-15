@@ -8,15 +8,12 @@ Group Members: Nathan Obert M03134502, Keegan Maynard
 #include <string>
 using namespace std;
 
-
-
-
 int main()
 {
     vector<Accounts> acctVect = getInfo(); //gets any info if present, otherwise returns am empty vect
 
     string mainInterface = "\n[1] Open an account\n[2] Login to an account\n[3] Exit bank\n";
-    string accountInterface = "\n[1] Display Balance\n[2] Make a deposit\n[3] Make a withdrawl\n";
+    string accountInterface = "\n[1] Display Balance\n[2] Make a deposit\n[3] Make a withdrawl\n[4] Go back\n";
     
     if (acctVect.size() > 0)
     {
@@ -127,6 +124,10 @@ int main()
                             userWithdraw(acctVect, actNum, index);  
                             displayBalance(acctVect, actNum, index);                        
                             break;
+                        }
+                        case 4: //go back
+                        {
+                            break; //going back a screen is the same as going to the top of the while loop
                         }
                         default: //bad option
                         {
