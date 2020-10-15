@@ -70,7 +70,7 @@ void CheckingAccount::setRisk(int option)
 
 string CheckingAccount::deposit(double amount)
 {
-    if (isOpen())
+    if (isOpen()) //only if open is the acct able to deposit
     {
         try
         {
@@ -106,12 +106,13 @@ string CheckingAccount::deposit(double amount)
 
 void CheckingAccount::nsfCharge()
 {
-    setBal( getBal() - 25.00 ); //always a 25.00 fee
+    setSerCharge(25.00);
+    performSerCharge();
 }
 
 string CheckingAccount::withdraw(double amount)
 {
-    if (isOpen())
+    if (isOpen()) //only if open is the acct able to withdraw
     {
         try
         {

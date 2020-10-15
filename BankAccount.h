@@ -24,6 +24,7 @@ public:
     virtual string withdraw(double amount) = 0;
     void calcInt();
     void performSerCharge();
+    void yearlyCharge(double amount);
     virtual void closeAcc() = 0;
     static double roundNum(double value, int decimal); //used to help validate user input for depoit and withdraw, hence static
 
@@ -38,17 +39,33 @@ public:
     void setIsClosed(bool yes);
     bool isOpen();
 
+
+    static bool yearlyChargeEnabled;
+    static int LAST_YEARLY_CHARGE;
     static string displayNum(double input);
     static string CURRENT_ACCT_NUM; //global variable for acct num
     static time_t LAST_INT_CALCULATION;
     static void incrementActNum(string lastActNum);
 };
 string BankAccount::CURRENT_ACCT_NUM = "00001"; //initial value, means there can be up to 99999 distinct accounts
-time_t BankAccount::LAST_INT_CALCULATION; //in implementation, this will always be some day at midnight
+time_t BankAccount::LAST_INT_CALCULATION = time(0);
+int BankAccount::LAST_YEARLY_CHARGE = 120; //number of years after 1900
+bool BankAccount::yearlyChargeEnabled = false; //must set to true to turn on yearly charges
+
+void BankAccount::setSerCharge(double charge)
+{
+    serCharge = charge;
+}
 
 void BankAccount::performSerCharge()
 {
     balance -= serCharge; 
+}
+
+void BankAccount::yearlyCharge(double amount)
+{
+    setSerCharge(amount); //assumes $25.00 yearly charge
+    performSerCharge();
 }
 
 double BankAccount::roundNum(double value, int decimal)
@@ -122,10 +139,16 @@ double BankAccount::getRate()
     return intRate;
 }
 
-void BankAccount::setSerCharge(double charge)
+void BankAccount::setIsClosed(bool yes)
 {
-    serCharge = charge;
+    isClosed = (yes == true) ? true : false;
 }
+
+bool BankAccount::isOpen()
+{
+    return !isClosed;
+}
+
 
 BankAccount::BankAccount(string actNum, double bal, double rate)
 {
@@ -174,13 +197,4 @@ void BankAccount::incrementActNum(string lastActNum = "")
 
 }
 
-void BankAccount::setIsClosed(bool yes)
-{
-    isClosed = (yes == true) ? true : false;
-}
-
-bool BankAccount::isOpen()
-{
-    return !isClosed;
-}
 #endif

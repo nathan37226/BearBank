@@ -27,6 +27,7 @@ inline SavingsAccount createSavFromInfo(string info);
 inline int daysElapsed(time_t &previousTime);
 inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime);
 inline time_t midnightTimeStamp();
+void performYearlyCharge(vector<Accounts> &acctVect, double serCharge);
 
 
 //displays user's balance
@@ -158,9 +159,12 @@ inline vector<Accounts> getInfo()
 
     else  //i.e. there is bank info saved
     {
-        string chkLine = "", savLine = "", lastIntTime = "";
-        getline(inputFile, lastIntTime);
-        BankAccount::LAST_INT_CALCULATION = stoi(lastIntTime.substr( lastIntTime.find(" ") + 1, string::npos) ); //converts the unix time saved inside .txt file to an int
+        string chkLine = "", savLine = "", timestamp = "";
+        getline(inputFile, timestamp);
+        int spacePos = timestamp.find(" "); //to eliminate repetitve calling
+        int commaPos = timestamp.find(",");
+        BankAccount::LAST_INT_CALCULATION = stoi( timestamp.substr( spacePos + 1, commaPos - spacePos - 1) );; //converts the unix time saved inside .txt file to an int
+        BankAccount::LAST_YEARLY_CHARGE = stoi( timestamp.substr( commaPos + 1, string::npos) ); //reads integer from file as how many years since 1900 to help with yearly charges
 
         while (getline(inputFile, chkLine))
         {
@@ -202,11 +206,12 @@ inline string getAccountInfo(Accounts &accts)
 inline void saveInfo(vector<Accounts> &acctVect)
 {
     computeInterest(acctVect, BankAccount::LAST_INT_CALCULATION); //when info is saved, need to make sure interest is up to date
+    performYearlyCharge(acctVect, 25.00); //assumes a 25.00 yearly charge, also will only work if charges are enabled
 
     ofstream outFile;
     outFile.open("TotallyNotBankInfo.txt"); //this will rewrite our 100% secure database entirely, i.e. open with trunc
 
-    outFile << "Timestamp: " << BankAccount::LAST_INT_CALCULATION << endl;
+    outFile << "Timestamp: " << BankAccount::LAST_INT_CALCULATION << ", " << BankAccount::LAST_YEARLY_CHARGE << endl;
 
     for (int i=0; i < acctVect.size(); i++)
     {
@@ -306,6 +311,30 @@ inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime)
             }
         }
         BankAccount::LAST_INT_CALCULATION = midnightTimeStamp(time(0)); //updates time to midnight of current day
+    }
+}
+
+//if yearly charges are enabled, this function will perform them if needed
+void performYearlyCharge(vector<Accounts> &acctVect, double serCharge)
+{
+    if (BankAccount::yearlyChargeEnabled) //only if enabled
+    {
+        time_t t = time(0);
+        tm *curTime = localtime(&t);
+        int currentYear = curTime->tm_year; //how many years since 1900, so for 2020 would be 120 years
+        int numOfYears = currentYear - BankAccount::LAST_YEARLY_CHARGE;
+
+        if ( numOfYears > 0) //only if a year has passed does this occur
+        {
+            for (int years = 0; years < numOfYears; years++) //for each year
+            {
+                for (int i = 0; i < acctVect.size(); i++) //for each set of accounts
+                {
+                    acctVect[i].sav.yearlyCharge(serCharge); //only gets charged to savings account
+                }
+            }
+            BankAccount::LAST_YEARLY_CHARGE = currentYear; //only if year has passed does it need to be updated
+        }
     }
 }
 #endif

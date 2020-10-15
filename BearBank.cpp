@@ -8,6 +8,7 @@ Group Members: Nathan Obert M03134502, Keegan Maynard
 #include <string>
 using namespace std;
 
+
 int main()
 {
     vector<Accounts> acctVect = getInfo(); //gets any info if present, otherwise returns am empty vect
@@ -147,3 +148,4 @@ int main()
 
     return 0;
 }
+

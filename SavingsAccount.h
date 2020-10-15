@@ -103,7 +103,7 @@ string SavingsAccount::deposit(double amount)
 
 string SavingsAccount::withdraw(double amount)
 {
-	if (isOpen())
+	if (isOpen()) //only if open is the acct able to withdraw
 	{
 		string newStatus;
 
