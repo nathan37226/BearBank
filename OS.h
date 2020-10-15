@@ -49,11 +49,12 @@ inline void userDeposit(vector<Accounts> &acctVect, string &actNum, const int &i
     string amount = "";
     cout << "Enter an amount to deposit: ";
     getline(cin, amount);
+
     if ( !validateInput(amount) )
     {
         cout << "Invalid number entered!" << endl;
     }
-    else
+    else //a proper number is entered
     {
         string message = "";
         if (actNum.substr(0, 1) == "C") //into checking
@@ -82,6 +83,7 @@ inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &
     {
         cout << "Your savings account has been permanently closed due to a balance of less than $1.00" << endl;
     }
+
     else //either checking or an active saving
     {
         string amount = "";
@@ -99,7 +101,7 @@ inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &
                 message = acctVect[index].chk.withdraw( stod(amount) );
                 cout << message << endl;
             }
-            else //for active saving
+            else //for saving
             {
                 message = acctVect[index].sav.withdraw( stod(amount) );
                 cout << message << endl;
