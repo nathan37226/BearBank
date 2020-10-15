@@ -68,86 +68,102 @@ string SavingsAccount::getStatus()
 
 string SavingsAccount::deposit(double amount)
 {
-	if (status == "Permanently Closed")
+	if (isOpen())
 	{
-		string inactive = "Error, this account has been closed and is no longer active.";
-		return inactive;
-	}
-	try
-	{
-		if(amount < 0.01)
+		if (status == "Permanently Closed")
 		{
-			string error = "Invalid arguement: you cannot deposit a negative amount";
-			throw error;
+			string inactive = "Error, this account has been closed and is no longer active.";
+			return inactive;
 		}
-		else
-		{
-			setBal(getBal() + amount);
-		}
-	}
-	catch (string err)
-	{
-		cout << err << endl;
-	}
-    string amnt = to_string(amount);
-    amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
-    return "You have successfully deposited $" + amnt + " into your account.";
-}
-
-string SavingsAccount::withdraw(double amount)
-{
-	string newStatus;
-
-	if (status == "Inactive")
-	{
-		newStatus = "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account\n";
-		return newStatus;		//returns status of the account, discards the withdrawl
-	}
-	else if (status == "Permanently Closed")
-	{
-		newStatus = "There is less than $1.00 in the account, it has been permanently closed.\n";
-		return newStatus;		//returns status of the account, discards the withdrawl
-	}
-	else
-	{
 		try
 		{
 			if (amount < 0.01)
 			{
-				string error = "Invalid Arguement: cannot withdraw less than $0.01";
+				string error = "Invalid arguement: you cannot deposit a negative amount";
 				throw error;
+			}
+			else
+			{
+				setBal(getBal() + amount);
 			}
 		}
 		catch (string err)
 		{
 			cout << err << endl;
 		}
-
-		double newBal = getBal() - amount;
-
-		if (newBal < 50.0)
-		{
-			setSerCharge(5.0);
-			performSerCharge();
-
-			if (getBal() < 1.00)
-			{
-				setStatus(3);
-			}
-			else
-			{
-				setStatus(2);
-			}
-		}
-
-		setBal(newBal);
-
-		return "You have withdrawn $" + BankAccount::displayNum(amount) + " from you account.";
+		string amnt = to_string(amount);
+		amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
+		return "You have successfully deposited $" + amnt + " into your account.";
 	}
+	else
+	{
+		cout << "The account is currently closed" << endl;
+	}
+}
+
+string SavingsAccount::withdraw(double amount)
+{
+	if (isOpen())
+	{
+		string newStatus;
+
+		//These if statements are for redundancy, in case there is an error in OS.h with the account status
+		if (status == "Inactive")
+		{
+			newStatus = "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account\n";
+			return newStatus;		//returns status of the account, discards the withdrawl
+		}
+		else if (status == "Permanently Closed")
+		{
+			newStatus = "There is less than $1.00 in the account, it has been permanently closed.\n";
+			return newStatus;		//returns status of the account, discards the withdrawl
+		}
+		else
+		{
+			try
+			{
+				if (amount < 0.01)
+				{
+					string error = "Invalid Arguement: cannot withdraw less than $0.01";
+					throw error;
+				}
+			}
+			catch (string err)
+			{
+				cout << err << endl;
+			}
+
+			double newBal = getBal() - amount;
+
+			if (newBal < 50.0)
+			{
+				setSerCharge(5.0);
+				performSerCharge();
+
+				if (getBal() < 1.00)
+				{
+					setStatus(3);
+				}
+				else
+				{
+					setStatus(2);
+				}
+			}
+
+			setBal(newBal);
+
+			return "You have withdrawn $" + BankAccount::displayNum(amount) + " from you account.";
+		}
+	}
+	else
+	{
+		cout << "The account is currently closed" << endl;
+	}
+	
 }
 
 void SavingsAccount::closeAcc()
 {
-	;
+	setIsClosed(true);
 }
 #endif
