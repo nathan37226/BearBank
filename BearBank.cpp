@@ -9,6 +9,8 @@ Group Members: Nathan Obert M03134502, Keegan Maynard
 using namespace std;
 
 
+
+
 int main()
 {
     vector<Accounts> acctVect = getInfo(); //gets any info if present, otherwise returns am empty vect
@@ -80,7 +82,7 @@ int main()
                 string actNum = "";
                 cout << "Enter an account number: ";
                 getline(cin, actNum);
-                
+
                 int index = findAcctIndex(acctVect, actNum);
 
                 if (index == -1) //acount does not exist
@@ -117,11 +119,13 @@ int main()
                         case 2: //making a deposit
                         {
                             userDeposit(acctVect, actNum, index); //also abstracted 
+                            displayBalance(acctVect, actNum, index); //displaying balance again
                             break;
                         }
                         case 3: //making a withdrawl
                         {
-                            userWithdraw(acctVect, actNum, index);                          
+                            userWithdraw(acctVect, actNum, index);  
+                            displayBalance(acctVect, actNum, index);                        
                             break;
                         }
                         default: //bad option

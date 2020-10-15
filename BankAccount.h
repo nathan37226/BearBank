@@ -87,9 +87,12 @@ double BankAccount::roundNum(double value, int decimal)
 
 void BankAccount::calcInt()
 {
-    double dailyIntRate = intRate / 365;
-    double dailyInt = dailyIntRate * balance;
-    balance = roundNum(balance + dailyInt, 2); //private member function to round to a given amount of decimals
+    if (balance > 0) //negative accounts dont get interest, and interst on 0 is 0
+    {   
+        double dailyIntRate = intRate / 365;
+        double dailyInt = dailyIntRate * balance;
+        balance = roundNum(balance + dailyInt, 2); //private member function to round to a given amount of decimals
+    }
 }
 
 //Setter and Getter functions

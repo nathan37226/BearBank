@@ -76,8 +76,7 @@ string CheckingAccount::deposit(double amount)
         {
             if (amount < 0.01)
             {
-                string error = "Invalid argument: you cannot deposit a negative amount";
-                throw error;
+                throw "Invalid argument: you cannot deposit a negative amount";
             }
             else if (amount <= 9999.0) //will not flag account
             {
@@ -118,8 +117,7 @@ string CheckingAccount::withdraw(double amount)
         {
             if (amount < 0.0)
             {
-                string error = "Invalid Argument: cannot withdraw less than $0.00";
-                throw error;
+                throw "Invalid Argument: cannot withdraw less than $0.00";
             }
         }
         catch (string err)

@@ -74,9 +74,13 @@ inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &
 {
     string status = acctVect[index].sav.getStatus();
 
-    if ( (actNum.substr(0, 1) == "S") && (status == "Inactive") )
+    if (status == "Inactive")
     {
-        cout << "Your savings account is inactive!\nIts balance must reach 50.00 before withdrawing is enabled." << endl;
+        cout << "Your savings account's balance must reach 50.00 before withdrawing is enabled." << endl;
+    }
+    else if (status == "Permanently Closed")
+    {
+        cout << "Your savings account has been permanently closed due to a balance of less than $1.00" << endl;
     }
     else //either checking or an active saving
     {
