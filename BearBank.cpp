@@ -9,7 +9,7 @@ Group Members: Nathan Obert M03134502, Keegan Maynard
 using namespace std;
 
 int main()
-{   
+{
     vector<Accounts> acctVect = getInfo(); //gets any info if present, otherwise returns am empty vect
 
     string mainInterface = "\n[1] Open an account\n[2] Login to an account\n[3] Exit bank\n";

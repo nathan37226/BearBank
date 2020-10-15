@@ -100,66 +100,50 @@ string SavingsAccount::withdraw(double amount)
 
 	if (status == "Inactive")
 	{
-		newStatus = "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account" << endl;
+		newStatus = "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account\n";
 		return newStatus;		//returns status of the account, discards the withdrawl
 	}
 	else if (status == "Permanently Closed")
 	{
-		newStatus = "There is less than $1.00 in the account, it has been permanently closed. " << endl;
+		newStatus = "There is less than $1.00 in the account, it has been permanently closed.\n";
 		return newStatus;		//returns status of the account, discards the withdrawl
 	}
-	try
+	else
 	{
-		if (amount < 0.01)
+		try
 		{
-			string error = "Invalid Arguement: cannot withdraw less than $0.01";
-			throw error;
+			if (amount < 0.01)
+			{
+				string error = "Invalid Arguement: cannot withdraw less than $0.01";
+				throw error;
+			}
 		}
-	}
-	catch (string err)
-	{
-		cout << err << endl;
-	}
-
-	double newBal = getBal() - amount;
-
-	if (newBal < 50.0)
-	{
-		setSerCharge(5.0);
-		performSerCharge();
-		
-		if (getBal() < 1.00)
+		catch (string err)
 		{
-			setStatus(3);
+			cout << err << endl;
 		}
-		else
-		{
-			setStatus(2);
-		}
-	}
-<<<<<<< HEAD
 
-	if (status == "Active")
-=======
-	if (status == "Inactive")
-	{
-		newStatus = "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account.";
-		return newStatus;		//returns status of the account, discards the withdrawl
-	}
-	else if (status == "Permanently Closed")
-	{
-		newStatus = "There is less than $1.00 in the account, it has been permanently closed.";
-		return newStatus;		//returns status of the account, discards the withdrawl
-	}
-	else 
->>>>>>> 76d7d5a8a691b4d868c46ded780da4fe6a1ff214
-	{
+		double newBal = getBal() - amount;
+
+		if (newBal < 50.0)
+		{
+			setSerCharge(5.0);
+			performSerCharge();
+
+			if (getBal() < 1.00)
+			{
+				setStatus(3);
+			}
+			else
+			{
+				setStatus(2);
+			}
+		}
+
 		setBal(newBal);
+
+		return "You have withdrawn $" + BankAccount::displayNum(amount) + " from you account.";
 	}
-	
-	string amnt = to_string(amount);
-	amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
-	return "You have withdrawn $" + amnt + " from you account.";
 }
 
 void SavingsAccount::closeAcc()

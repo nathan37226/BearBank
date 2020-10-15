@@ -15,6 +15,7 @@ private:
     double balance;
     double intRate;
     double serCharge;
+    bool isClosed;
 
 public:
     BankAccount(){}
@@ -34,8 +35,10 @@ public:
     void setRate(double rate);
     double getRate();
     void setSerCharge(double charge);
-    static string displayNum(double input);
+    void setIsClosed(bool yes);
+    bool isOpen();
 
+    static string displayNum(double input);
     static string CURRENT_ACCT_NUM; //global variable for acct num
     static time_t LAST_INT_CALCULATION;
     static void incrementActNum(string lastActNum);
@@ -166,5 +169,16 @@ void BankAccount::incrementActNum(string lastActNum = "")
     num += 1;
 
     CURRENT_ACCT_NUM = firstPartOfNum + to_string(num);
+
+}
+
+void BankAccount::setIsClosed(bool yes)
+{
+    isClosed = (yes == true) ? true : false;
+}
+
+bool BankAccount::isOpen()
+{
+    return !isClosed;
 }
 #endif
