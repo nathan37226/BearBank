@@ -1,3 +1,6 @@
+/*
+Group Members: Keegan Maynard M03114078 and Nathan Obert M03134502
+*/
 #ifndef SAVINGSACCOUNT_H
 #define SAVINGSACCOUNT_H
 #include <string>
@@ -29,9 +32,9 @@ void SavingsAccount::setStatus(int option)
 {
 	try
 	{
-		string actNum = getActNum();
+		string actNum = getActNum();		//for easier access later
 
-		switch (option)
+		switch (option)		//set the status of the account 
 		{
 			case 1:
 			{
@@ -46,7 +49,7 @@ void SavingsAccount::setStatus(int option)
 			case 3:
 			{
 				status = "Permanently-Closed";
-				setIsClosed(true);
+				setIsClosed(true);		//close the account 
 				break;
 			}
 			default:
@@ -63,26 +66,26 @@ void SavingsAccount::setStatus(int option)
 
 string SavingsAccount::getStatus()
 {
-    return status;
+    return status;		//returns the status of the account: active, inactive, or permanently closed
 }
 
 string SavingsAccount::deposit(double amount)
 {
-	if (isOpen())
+	if (isOpen())		//only if the account is open will the deposit take place
 	{
 		try
 		{
-			if (amount < 0.01)
+			if (amount < 0.01)		//cannot deposit $0.00 into the account
 			{
 				throw "Invalid argument: you cannot deposit a negative amount.\n";
 			}
 			else
 			{
-				setBal(getBal() + amount);
+				setBal(getBal() + amount);		//set the new balance as the old balance plus the deposit
 
-				if (getBal() > 50.00)
+				if (getBal() > 50.00)		//if there is more than $50 in the account 
 				{
-					setStatus(1);
+					setStatus(1);		//set status as active
 				}
 			}
 		}
@@ -94,13 +97,14 @@ string SavingsAccount::deposit(double amount)
 	}
 	else
 	{
-		if (status == "Permanently-Closed")
+		if (status == "Permanently-Closed")			//if the account is permanently closed	
 		{
 			return "Error, this account has been permanently closed.\n";
 		}
 		else
+		//if the account is currently closed
 		{
-			return "This account is currently closed.";
+			return "This account is currently closed.\n";
 		}
 		
 	}
@@ -110,7 +114,7 @@ string SavingsAccount::withdraw(double amount)
 {
 	if (isOpen()) //only if open is the acct able to withdraw
 	{
-		//These if statements are for redundancy, in case there is an error in OS.h with the account status
+		//This if statement is for redundancy, in case there is an error in OS.h with the account status
 		if (status == "Inactive")
 		{
 			return "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account\n";		//returns status of the account, discards the withdrawl
@@ -123,7 +127,9 @@ string SavingsAccount::withdraw(double amount)
 			}
 			else
 			{
-				double newBal = getBal() - amount;
+				//only if the user withdraws more than $0.00
+
+				double newBal = getBal() - amount;		//set the new balance as the old balance minus the amount 
 
 				if (newBal < 0.0) //not allowed to go negative
 				{
@@ -131,6 +137,8 @@ string SavingsAccount::withdraw(double amount)
 				}
 				else if (newBal < 50.0)
 				{
+					//Only if there is less than $50.00 in the account
+
 					setSerCharge(5.0);
 					performSerCharge();
 					setBal(newBal); //charging request
