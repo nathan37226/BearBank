@@ -1,11 +1,11 @@
 /*
 Group Members: Nathan Obert M03134502 and Keegan Maynard M03114078
-This header file controls the checking account operations for BearBank.cpp. This header file is a child of the BankAccount header file, and inherits some
-of its members and functions. The CheckingAccount header file includes private members to store the risk of an account and a charge for a negative account balance, 
-public methods to initialize the account, deposit and withdraw money, closs the account, and set the risk, as well as a constructor to initialize the account
-and inherit some members from the BankAccount header file. 
-All of these methods and members are used to keep track of the balance of the account, allow the user to add or remove money from the account, charge a fee
-if the account has a negative balance, set the risk of large deposits, and close the account. 
+This header file creates the Checking Account and its behaviors. The account is a child of BankAccount, so it inherits some of its 
+members and functions. The CheckingAccount includes private members to store the risk of an account and a charge non-sufficient
+fund fees, public methods to initialize the account, deposit and withdraw money, closs the account, and set the risk, 
+as well as a constructor to initialize the account.
+All of these methods and members are used to keep track of the balance of the account, allow the user to add or remove money from the 
+account, charge a fee if the account has a negative balance, define risk for bad withdrawls, and close the account. 
 */
 #ifndef CHECKINGACCOUNT_H
 #define CHECKINGACCOUNT_H
@@ -18,10 +18,10 @@ class CheckingAccount : public BankAccount
 {
 private:
     string flag;
-    void nsfCharge();
+    void nsfCharge(); //always charges a 25.00 fee
 
 public:
-    CheckingAccount(){}
+    CheckingAccount(){} //basic constructor
     CheckingAccount(string actNum, double bal, double rate);
     string deposit(double amount);
     string withdraw(double amount);
@@ -31,7 +31,7 @@ public:
 
 CheckingAccount::CheckingAccount(string actNum, double bal, double rate) : BankAccount(actNum, bal, rate) 
 {
-    ;
+    flag = "Low Risk"; //low risk initially
 }
 
 void CheckingAccount::setRisk(int option)
@@ -62,8 +62,7 @@ void CheckingAccount::setRisk(int option)
             }
             default:
             {
-                string error = "Invalid argument: setRisk expects 1 or 2, got passed the value " + to_string(option);
-                throw error;
+                throw "Invalid argument: setRisk expects 1 or 2, got passed the value " + to_string(option);
             }
         }
     }
@@ -72,6 +71,12 @@ void CheckingAccount::setRisk(int option)
             cout << err << endl;
         }
 
+}
+
+void CheckingAccount::nsfCharge()
+{
+    setSerCharge(25.00);
+    performSerCharge(); //technically this will allow for an infinite negative balance to accumulate, but fiscal responsibility is also important on the user's part
 }
 
 string CheckingAccount::deposit(double amount)
@@ -84,35 +89,31 @@ string CheckingAccount::deposit(double amount)
             {
                 throw "Invalid argument: you cannot deposit a negative amount";
             }
-            else if (amount <= 9999.0) //will not flag account
+            else 
             {
-                setBal(getBal() + amount);
-            }
-            else
-            {
-                setBal(getBal() + amount);
-                setRisk(2); // since more than $9999.00 deposited, must flag acct as high risk
+                if (amount <= 9999.0) //will not flag account
+                {
+                    setBal(getBal() + amount);
+                }
+                else
+                {
+                    setBal(getBal() + amount);
+                    setRisk(2); // since more than $9999.00 deposited, must flag acct as high risk
+                }
+                
+                return "You have successfully deposited $" + BankAccount::displayNum(amount) + " into your account.";
             }
         }
         catch (string err)
         {
-            cout << err << endl;
+            return err;
         }
-        string amnt = to_string(amount);
-        amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
-        return "You have successfully deposited $" + amnt + " into your account.";
     }
     else
     {
         return "The account is currently closed\n";
     }
     
-}
-
-void CheckingAccount::nsfCharge()
-{
-    setSerCharge(25.00);
-    performSerCharge();
 }
 
 string CheckingAccount::withdraw(double amount)
@@ -128,7 +129,7 @@ string CheckingAccount::withdraw(double amount)
         }
         catch (string err)
         {
-            cout << err << endl;
+            return err;
         }
 
         double newBal = getBal() - amount;

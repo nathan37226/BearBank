@@ -1,12 +1,14 @@
 /*
 Group Members: Nathan Obert M03134502 and Keegan Maynard M03114078
-This CPP contians the prompts and controls for user interface. All of the code is included in a single function, and much of it is included in a while loop
-so that the program will loop until the user decides to end the program. 
-The file begins be attempting to fill the accounts vector, and if there is information already in the vector it saves it to the text file. If there are no
-accounts to add to the vector, the time stamp is initialized to the current time. Then the main function calls a while loop that displays the user
-interface and gathers user input to determine what functions to call using a case-switch option. If the user enters option one, the program creates an 
-account, if option two is entered, the program allows the user to log into the account, and if option three is entered, the program logs out of the banking
-system and breaks the while loop. 
+This CPP contians the prompts and controls for user interface. The user interface acts like an ADT to assist the user in interacting with
+their checking and savings accounts as well as openning new ones. Structure wise, this program is essentially a set of switch cases
+and a while loop that gather input from the user. The user's accounts are stored as a pair in a struct object named "Accounts." All
+of the data for each set is stored in a vector of type "Accounts." 
+As this program is designed to simply allow the user to interact with the bank accounts, this program does little beyond gathering 
+and validating input (which includes proper inputs as well as if an input is allowed, e.g. a user withdrawing from an inactive account). 
+After which, all tasks are abstracted out to a header file titled "OS." This header file contains all the functions that are called by this 
+program (and the helper functions used therein). Essentially, this program sends a message to OS of what is needing to happen,
+e.g. a user make a deposit into a certain account of a certain amount, and OS will make it happen. 
 */
 #include "OS.h"
 #include <iostream>
@@ -29,7 +31,7 @@ int main()
     }
     else
     {
-        BankAccount::LAST_INT_CALCULATION = midnightTimeStamp(time(0)); //since nothing in vector, no current timestamp. this initializes it to be the current day at midnight
+        BankAccount::LAST_INT_CALCULATION = midnightTimeStamp(time(0)); //since nothing in vector, no current timestamp. this sets it to be the current day at midnight
     }
     
 
@@ -60,7 +62,7 @@ int main()
                 string chkNum = "", savNum = "";
                 chkNum = "C" + BankAccount::CURRENT_ACCT_NUM;
                 savNum = "S" + BankAccount::CURRENT_ACCT_NUM;
-                BankAccount::incrementActNum(); //used that num, so need to prepare for next number
+                BankAccount::incrementActNum(); //used that num, so need to prepare for next account to be generated
 
                 cout << "Your account numbers are " << chkNum << " and " << savNum << " for your ";
                 cout << "new Checking Account and Savings Account, respectively." << endl;
@@ -68,7 +70,7 @@ int main()
                 cout << "Your Savings Account, " << savNum << ", has an initial balance of $50.00 with an interest rate of 1.5%" << endl;
                 
                 CheckingAccount newChkAcct = CheckingAccount(chkNum, 5.00, 0.5); //creating the checking acct
-                SavingsAccount newSavAcct = SavingsAccount(savNum, 50.00, 1.5); //same with savings acct
+                SavingsAccount newSavAcct = SavingsAccount(savNum, 50.00, 1.5); 
                 newSavAcct.setStatus(1); //making it active
 
                 Accounts newSet; //struct object to store the two new accts

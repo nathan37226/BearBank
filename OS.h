@@ -1,3 +1,17 @@
+/*
+Group Members: Nathan Obert M03134502 and Keegan Maynard M03114078
+This header file contains all the functions used explicitly or implicitly in BearBank.cpp. This header essentially implements
+abstract needs of BearBank, like a user making a deposit or saving to a file. Bearbank issues a command, and this header carrys
+it out. As such, this header is like an operating system for BearBank. 
+The function prototypes are grouped by likeness; the first group is for user interaction with the accounts, the second is for 
+getting info from and writing info to the .txt file (where all data is stored), and the third is for computing interest
+and yearly charges for all accounts.
+The third group uses unix time for all calculations. Inside the .txt file, the first line is "Timestamp: [unixTime], [years]"
+The unixTime represents the time of the last interest calculation (which will always be at midnight on some day) while years
+represents how many years have passed since 1900 (a built-in STL method I took advantage of). These data help assist in knowing
+whether daily interst needs to be applied and the same with yearly service charges (only if the charges are enabled, though). 
+Interest calculations and service charges are attempted everytime "saveInfo" is called, which writes to the .txt file. 
+*/
 #ifndef OS_H
 #define OS_H
 #include <string>
@@ -14,20 +28,24 @@ struct Accounts
     SavingsAccount sav;
 };
 
+
 inline void displayBalance(vector<Accounts> &acctVect, const string &actNum, const int &index);
 inline void userDeposit(vector<Accounts> &acctVect, string &actNum, const int &index);
 inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &index);
-inline string getAccountInfo(Accounts &accts);
 inline bool validateInput(const string &inputNum);
 inline int findAcctIndex(vector<Accounts> vect, const string &actNum);
+
 inline vector<Accounts> getInfo();
+inline string getAccountInfo(Accounts &accts);
 inline void saveInfo(vector<Accounts> &acctVect);
 inline CheckingAccount createChkFromInfo(string info);
 inline SavingsAccount createSavFromInfo(string info);
+
 inline int daysElapsed(time_t &previousTime);
 inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime);
 inline time_t midnightTimeStamp();
 inline void performYearlyCharge(vector<Accounts> &acctVect, double serCharge);
+
 
 
 //displays user's balance
@@ -74,12 +92,13 @@ inline void userDeposit(vector<Accounts> &acctVect, string &actNum, const int &i
 inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &index)
 {
     string status = acctVect[index].sav.getStatus();
+    bool isSavings = (actNum.substr(0,1) == "S") ? true : false;
 
-    if (status == "Inactive")
+    if ( (status == "Inactive") && (isSavings) )
     {
         cout << "Your savings account's balance must reach 50.00 before withdrawing is enabled." << endl;
     }
-    else if (status == "Permanently-Closed")
+    else if ( (status == "Permanently-Closed") && (isSavings) )
     {
         cout << "Your savings account has been permanently closed due to a balance of less than $1.00" << endl;
     }
@@ -287,15 +306,11 @@ inline SavingsAccount createSavFromInfo(string info)
         //info is now just whether teh account is open
         SavingsAccount acct = SavingsAccount(actNum, bal, rate); //creating return object
 
-        if (status == "Active")
-        {
-            acct.setStatus(1); //changing status member to match
-        }
-        else if (status == "Inactive")
+        if (status == "Inactive") //status is defaulted to Active, so need to change if anything but Active is in the .txt file
         {
             acct.setStatus(2);
         }
-        else
+        else if (status == "Permanently-Closed")
         {
             acct.setStatus(3); //permanently closed
         }
@@ -309,7 +324,6 @@ inline SavingsAccount createSavFromInfo(string info)
             acct.setIsClosed(false);
         }
         
-
         return acct;
     }
 }

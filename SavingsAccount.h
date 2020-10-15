@@ -19,7 +19,7 @@ private:
 	string status;
 
 public:
-    SavingsAccount(){}
+    SavingsAccount(){} //basic constructor
 	SavingsAccount(string actNum, double bal, double rate);
 	string deposit(double amount);
 	string withdraw(double amount);
@@ -30,14 +30,14 @@ public:
 
 SavingsAccount::SavingsAccount(string actNum, double bal, double rate) : BankAccount(actNum, bal, rate)
 {
-	;
+	status = "Active"; 
 }
 
 void SavingsAccount::setStatus(int option)
 {
 	try
 	{
-		string actNum = getActNum();		//for easier access later
+		string actNum = getActNum();	//for easier access later
 
 		switch (option)		//set the status of the account 
 		{
@@ -93,12 +93,12 @@ string SavingsAccount::deposit(double amount)
 					setStatus(1);		//set status as active
 				}
 			}
+			return "You have successfully deposited $" + BankAccount::displayNum(amount) + " into your account.\n";
 		}
 		catch (string err)
 		{
-			cout << err << endl;
+			return err;
 		}
-		return "You have successfully deposited $" + BankAccount::displayNum(amount) + " into your account.\n";
 	}
 	else
 	{
@@ -119,7 +119,6 @@ string SavingsAccount::withdraw(double amount)
 {
 	if (isOpen()) //only if open is the acct able to withdraw
 	{
-		//This if statement is for redundancy, in case there is an error in OS.h with the account status
 		if (status == "Inactive")
 		{
 			return "There is less than $50.00 in the account, it is now inactive. No more withdrawls can be made until there is more than $50.00 in the account\n";		//returns status of the account, discards the withdrawl
@@ -132,9 +131,8 @@ string SavingsAccount::withdraw(double amount)
 			}
 			else
 			{
-				//only if the user withdraws more than $0.00
-
-				double newBal = getBal() - amount;		//set the new balance as the old balance minus the amount 
+				//only if the user withdraws more than $0.01
+				double newBal = getBal() - amount; 
 
 				if (newBal < 0.0) //not allowed to go negative
 				{
@@ -172,9 +170,7 @@ string SavingsAccount::withdraw(double amount)
 		{
 			return "The account is currently closed\n";
 		}
-		
 	}
-	
 }
 
 void SavingsAccount::closeAcc()

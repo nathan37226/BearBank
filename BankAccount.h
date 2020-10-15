@@ -1,10 +1,10 @@
 /*
 Group Members: Nathan Obert M03134502 and Keegan Maynard M03114078
-This header file is the parent class for the account types, and includes common members and methods such as balance, interest rate, service charges, 
-and status of the account (closed or open). This header file includes a public constructor to initialize the accounts with default values, public methods to 
-deposit or withdraw, as well as other methods to perform service charges, calculate interest, round the values of the account, and open or close the account. 
-The BankAccount header file was not used to compute much, if any, of the mathematics for the savings or checking accounts, but was used to store common members
-and methods that both header files would need. 
+This header file is the parent class for the SavingsAccount and CheckingAccount, and includes common members and methods such as balance, 
+interest rate, service charges, and status of the account (closed or open). This header file includes a public constructor to initialize 
+the accounts with default values, public methods to deposit or withdraw, as well as other methods to perform service charges, calculate 
+interest, round the values of the account, and open or close the account. The BankAccount header file was not used to compute much, if any, 
+of the mathematics for the savings or checking accounts, but was used to store common members and methods that both header files would need. 
 */
 #ifndef BANKACCOUNT_H
 #define BANKACCOUNT_H
@@ -31,7 +31,6 @@ public:
     void performSerCharge();
     void yearlyCharge(double amount);
     virtual void closeAcc() = 0;
-    static double roundNum(double value, int decimal); //used to help validate user input for depoit and withdraw, hence static
 
     //setter and getter functs, for derived class use
     void setActNum(string num);
@@ -44,17 +43,19 @@ public:
     void setIsClosed(bool yes);
     bool isOpen();
 
-
+    static double roundNum(double value, int decimal); //used to help validate user input for depoit and withdraw, hence static
     static bool YEARLY_CHARGE_ENABLED;
     static int LAST_YEARLY_CHARGE;
-    static string displayNum(double input);
     static string CURRENT_ACCT_NUM; //global variable for acct num
-    static time_t LAST_INT_CALCULATION;
-    static void incrementActNum(string lastActNum);
+    static time_t LAST_INT_CALCULATION; //last time daily interest was computed
+    static string displayNum(double input); //e.g. 25.550000 becomees 25.55
+    static void incrementActNum(string lastActNum); //increments CURRENT_ACCT_NUM
 };
+
+//initializing static members
 string BankAccount::CURRENT_ACCT_NUM = "00001"; //initial value, means there can be up to 99999 distinct accounts
-time_t BankAccount::LAST_INT_CALCULATION = time(0);
-int BankAccount::LAST_YEARLY_CHARGE = 120; //number of years after 1900
+time_t BankAccount::LAST_INT_CALCULATION = time(0); //curent unix time
+int BankAccount::LAST_YEARLY_CHARGE = 120; //number of years after 1900, assuming its 2020
 bool BankAccount::YEARLY_CHARGE_ENABLED = false; //must set to true to turn on yearly charges
 
 //constructor
@@ -73,8 +74,11 @@ void BankAccount::performSerCharge()
 
 void BankAccount::yearlyCharge(double amount)
 {
-    setSerCharge(amount); //amount is whatever the yearly charge happens to be
-    performSerCharge();
+    if (!isClosed) //only if acct is open does a yearly charge occur
+    {
+        setSerCharge(amount); //amount is whatever the yearly charge happens to be
+        performSerCharge();
+    }
 }
 
 double BankAccount::roundNum(double value, int decimal)
@@ -131,7 +135,7 @@ void BankAccount::setRate(double rate)
     {
         if ( (rate > 10.00) || (rate < 0.10) ) //these are specifically for the sav account, but there's no reason to also not restrict on checking acct
         {
-            throw 1;
+            throw 1; //generic error
         }
         else
         {
@@ -141,7 +145,7 @@ void BankAccount::setRate(double rate)
     catch (int a)
     {
         cout << "The program will be aborted due to an invlaid interest rate\n";
-        abort();
+        abort(); //this guarentee's the int rate has to be valid even if it gets messed with
     }
 }
 
@@ -160,9 +164,9 @@ void BankAccount::setIsClosed(bool yes)
     isClosed = (yes == true) ? true : false;
 }
 
-bool BankAccount::isOpen()
+bool BankAccount::isOpen() //a getter function for priv member 'isClosed'-- it was titled isOpen due to ease of readability
 {
-    return !isClosed;
+    return !isClosed; //open is equivalent to not closed
 }
 
 //used to display a double of $ properly in conjunction with cout
@@ -184,13 +188,14 @@ void BankAccount::incrementActNum(string lastActNum = "")
     {
         num = stoi( lastActNum.substr(1, string::npos) ); //used if there are currently existing accts
     }
-    
+    num += 1; //increments account num
+
     int count = 0;
     int numCopy = num; //copying value into new var
     while (numCopy >= 1)
     {
         numCopy /= 10;
-        count++; //count, upon end of while loop, will represent the highest power of 10, i.e. whether in the ones, tens, hundreds, etc
+        count++; //count, upon end of while loop, will represent the highest power of 10, i.e. whether in the ones, tens, hundreds, etc position
     }
     
     string firstPartOfNum = "";
@@ -198,7 +203,6 @@ void BankAccount::incrementActNum(string lastActNum = "")
     {
         firstPartOfNum += "0";
     }
-    num += 1;
 
     CURRENT_ACCT_NUM = firstPartOfNum + to_string(num);
 
