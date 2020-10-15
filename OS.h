@@ -349,10 +349,8 @@ inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime)
         {
             for (int index = 0; index < acctVect.size(); index++) //for each set of accounts in the vector
             {
-                if (acctVect[index].chk.isOpen()) //only if acct is open does it get interest
-                    acctVect[index].chk.calcInt(); //adds daily interst onto balance
-                if (acctVect[index].sav.isOpen())
-                    acctVect[index].sav.calcInt();
+                acctVect[index].chk.calcInt(); //adds daily interest onto balance, if possible
+                acctVect[index].sav.calcInt();
             }
         }
         BankAccount::LAST_INT_CALCULATION = midnightTimeStamp(time(0)); //updates time to midnight of current day

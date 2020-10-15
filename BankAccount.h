@@ -52,9 +52,13 @@ time_t BankAccount::LAST_INT_CALCULATION = time(0);
 int BankAccount::LAST_YEARLY_CHARGE = 120; //number of years after 1900
 bool BankAccount::yearlyChargeEnabled = false; //must set to true to turn on yearly charges
 
-void BankAccount::setSerCharge(double charge)
+//constructor
+BankAccount::BankAccount(string actNum, double bal, double rate)
 {
-    serCharge = charge;
+    setActNum(actNum);
+    setBal(bal);
+    setRate(rate);
+    setIsClosed(false);
 }
 
 void BankAccount::performSerCharge()
@@ -64,7 +68,7 @@ void BankAccount::performSerCharge()
 
 void BankAccount::yearlyCharge(double amount)
 {
-    setSerCharge(amount); //assumes $25.00 yearly charge
+    setSerCharge(amount); //amount is whatever the yearly charge happens to be
     performSerCharge();
 }
 
@@ -87,7 +91,7 @@ double BankAccount::roundNum(double value, int decimal)
 
 void BankAccount::calcInt()
 {
-    if (balance > 0) //negative accounts dont get interest, and interst on 0 is 0
+    if ( (balance > 0) && (!isClosed) ) //negative accounts dont get interest, and interst on 0 is 0--also has to be open to get interest
     {   
         double dailyIntRate = intRate / 365;
         double dailyInt = dailyIntRate * balance;
@@ -141,6 +145,11 @@ double BankAccount::getRate()
     return intRate;
 }
 
+void BankAccount::setSerCharge(double charge)
+{
+    serCharge = charge;
+}
+
 void BankAccount::setIsClosed(bool yes)
 {
     isClosed = (yes == true) ? true : false;
@@ -151,16 +160,7 @@ bool BankAccount::isOpen()
     return !isClosed;
 }
 
-
-BankAccount::BankAccount(string actNum, double bal, double rate)
-{
-    setActNum(actNum);
-    setBal(bal);
-    setRate(rate);
-    setIsClosed(false);
-}
-
-//used to display a double properly in conjunction with cout
+//used to display a double of $ properly in conjunction with cout
 string BankAccount::displayNum(double input)
 {
     string num = to_string(input);
