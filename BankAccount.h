@@ -111,7 +111,8 @@ void BankAccount::setRate(double rate)
     }
     catch (int a)
     {
-        cout << "Invalid rate\n";
+        cout << "Invalid rate\nThe program will be aborted due to an invlaid rate\n";
+        abort();
     }
 
 }
@@ -131,6 +132,7 @@ BankAccount::BankAccount(string actNum, double bal, double rate)
     setActNum(actNum);
     setBal(bal);
     setRate(rate);
+    setIsClosed(false);
 }
 
 //used to display a double properly in conjunction with cout
