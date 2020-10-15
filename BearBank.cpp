@@ -14,7 +14,7 @@ int main()
     vector<Accounts> acctVect = getInfo(); //gets any info if present, otherwise returns am empty vect
 
     string mainInterface = "\n[1] Open an account\n[2] Login to an account\n[3] Exit bank\n";
-    string accountInterface = "\n[1] Make a deposit\n[2] Make a withdrawl";
+    string accountInterface = "\n[1] Display Balance\n[2] Make a deposit\n[3] Make a withdrawl\n";
     
     if (acctVect.size() > 0)
     {
@@ -29,7 +29,7 @@ int main()
 
     while (true) //main while loop
     {
-        cout << mainInterface << endl;
+        cout << mainInterface;
         string input = "";
         int option = -1;
         getline(cin, input);
@@ -75,10 +75,12 @@ int main()
             }
 
             case 2: //login to accounts
-            {
-                cout << "Enter an account number: ";
+            {                
+                int userOption = 0; //different input option for clarity / break main while loop condition further below
                 string actNum = "";
+                cout << "Enter an account number: ";
                 getline(cin, actNum);
+                
                 int index = findAcctIndex(acctVect, actNum);
 
                 if (index == -1) //acount does not exist
@@ -88,14 +90,13 @@ int main()
 
                 else //account exists, so deposit or withdraw
                 {
-                    displayBalance(acctVect, actNum, index); //displays user's balance
-                    cout << accountInterface << endl; //displays options for an acct
+                    cout << accountInterface; //displays options for an acct
                     getline(cin, input);
 
                     try //this is yet another input check
                     {
-                        if ((input.length() == 1) && (input != "3")) //this ensures option will never go to 3 if "3" is input, which saves while loop
-                            option = stoi(input); //Since stoi will make "2a" become 2, ensuring the length is 1 prevents this type of invalid input, also same with negative numbers
+                        if (input.length() == 1) //this ensures option will never go to 3 if "3" is input, which saves while loop
+                            userOption = stoi(input); //Since stoi will make "2a" become 2, ensuring the length is 1 prevents this type of invalid input, also same with negative numbers
                         else
                             throw 1; //just throwing any int here to be caught later
                     }
@@ -106,14 +107,19 @@ int main()
                     }
 
                     string amount = "";
-                    switch (option)
+                    switch (userOption)
                     {
-                        case 1: //making a deposit
+                        case 1: //display balance
                         {
-                            userDeposit(acctVect, actNum, index); //abstracted to make code more readable
+                            displayBalance(acctVect, actNum, index); //abstracted to make code more readable
                             break;
                         }
-                        case 2: //making a withdrawl
+                        case 2: //making a deposit
+                        {
+                            userDeposit(acctVect, actNum, index); //also abstracted 
+                            break;
+                        }
+                        case 3: //making a withdrawl
                         {
                             userWithdraw(acctVect, actNum, index);                          
                             break;
@@ -124,8 +130,7 @@ int main()
                             break;
                         }
                     }
-                    displayBalance(acctVect, actNum, index); //displays user's balance after withdraw or deposit
-                    saveInfo(acctVect); //just in case of premature exit of program, info is still saved
+                    saveInfo(acctVect);
                 }
             }
 

@@ -128,10 +128,9 @@ void BankAccount::setRate(double rate)
     }
     catch (int a)
     {
-        cout << "Invalid rate\nThe program will be aborted due to an invlaid rate\n";
+        cout << "The program will be aborted due to an invlaid interest rate\n";
         abort();
     }
-
 }
 
 double BankAccount::getRate()
