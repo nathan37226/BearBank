@@ -1,5 +1,10 @@
 /*
 Group Members: Keegan Maynard M03114078 and Nathan Obert M03134502
+This header file controls the savings account operations for the BearBank.cpp. The header file is a child class of the BankAccount header file, and inherits
+some of its members and functions. In the SavingsAccount header file includes a constructor to initialize the class based on information inheritted from 
+BankAccount.h, a private member to track the status of the account, as well as public methods to deposit money, withdraw money, close the account, and 
+set and get the status of the account. All of these methods are used to keep track of the balance of the account, set the status of the account and apply the 
+necessary restrictions, and allow the user to add or remove money from the account. 
 */
 #ifndef SAVINGSACCOUNT_H
 #define SAVINGSACCOUNT_H
