@@ -48,7 +48,7 @@ time_t BankAccount::LAST_INT_CALCULATION; //in implementation, this will always 
 
 void BankAccount::performSerCharge()
 {
-    balance -= serCharge; //check for once in a calendar year!
+    balance -= serCharge; 
 }
 
 double BankAccount::roundNum(double value, int decimal)
