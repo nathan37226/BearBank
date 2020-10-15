@@ -97,7 +97,7 @@ string SavingsAccount::deposit(double amount)
 	}
 	else
 	{
-		cout << "The account is currently closed" << endl;
+		return "The account is currently closed\n";
 	}
 }
 
@@ -157,7 +157,7 @@ string SavingsAccount::withdraw(double amount)
 	}
 	else
 	{
-		cout << "The account is currently closed" << endl;
+		return "The account is currently closed\n";
 	}
 	
 }

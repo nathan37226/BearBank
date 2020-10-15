@@ -99,7 +99,7 @@ string CheckingAccount::deposit(double amount)
     }
     else
     {
-        cout << "This account is currently closed" << endl;
+        return "The account is currently closed\n";
     }
     
 }
@@ -149,7 +149,7 @@ string CheckingAccount::withdraw(double amount)
     }
     else
     {
-        cout << "The account is currently closed" << endl;
+        return "The account is currently closed\n";
     }
 }
 
