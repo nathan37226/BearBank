@@ -70,77 +70,90 @@ void CheckingAccount::setRisk(int option)
 
 string CheckingAccount::deposit(double amount)
 {
-    try
+    if (isOpen()) //only if open is the acct able to deposit
     {
-        if (amount < 0.0)
+        try
         {
-            string error = "Invalid argument: you cannot deposit a negative amount";
-            throw error;
+            if (amount < 0.01)
+            {
+                throw "Invalid argument: you cannot deposit a negative amount";
+            }
+            else if (amount <= 9999.0) //will not flag account
+            {
+                setBal(getBal() + amount);
+            }
+            else
+            {
+                setBal(getBal() + amount);
+                setRisk(2); // since more than $9999.00 deposited, must flag acct as high risk
+            }
         }
-        else if (amount <= 9999.0) //will not flag account
+        catch (string err)
         {
-            setBal( getBal() + amount );
+            cout << err << endl;
         }
-        else
-        {
-            setBal( getBal() + amount );
-            setRisk(2); // since more than $9999.00 deposited, must flag acct as high risk
-        }
+        string amnt = to_string(amount);
+        amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
+        return "You have successfully deposited $" + amnt + " into your account.";
     }
-    catch (string err)
+    else
     {
-        cout << err << endl;
+        return "The account is currently closed\n";
     }
-    string amnt = to_string(amount);
-    amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
-    return "You have successfully deposited $" + amnt + " into your account.";
+    
 }
 
 void CheckingAccount::nsfCharge()
 {
-    setBal( getBal() - 25.00 ); //always a 25.00 fee
+    setSerCharge(25.00);
+    performSerCharge();
 }
 
 string CheckingAccount::withdraw(double amount)
 {
-    try
+    if (isOpen()) //only if open is the acct able to withdraw
     {
-        if (amount < 0.0)
+        try
         {
-            string error = "Invalid Argument: cannot withdraw less than $0.00";
-            throw error;
+            if (amount < 0.0)
+            {
+                throw "Invalid Argument: cannot withdraw less than $0.00";
+            }
         }
-    }
-    catch(string err)
-    {
-        cout << err << endl;
-    }
-    
-    double newBal = getBal() - amount;
+        catch (string err)
+        {
+            cout << err << endl;
+        }
 
-    if (newBal < 0.0)
-    {
-        if (getBal() >= 25.00) //i.e. can pay the fee without going neg
+        double newBal = getBal() - amount;
+
+        if (newBal < 0.0)
         {
-            nsfCharge(); //only charge fee, and the wanted withdraw will be discarded
+            if (getBal() >= 25.00) //i.e. can pay the fee without going neg
+            {
+                nsfCharge(); //only charge fee, and the wanted withdraw will be discarded
+            }
+            else //i.e. paying the nsf fee will make account go negative
+            {
+                nsfCharge(); //this will technically allow for infinite nsf fee's, so there should be a stop implemented sometime
+                setRisk(2);
+            }
+            return "You do not have suffient funds to withdraw $" + displayNum(amount) + ".\nYou have incurred a $25.00 non-sufficent fund fee.";
         }
-        else //i.e. paying the nsf fee will make account go negative
+        else
         {
-            nsfCharge(); //this will technically allow for infinite nsf fee's, so there should be a stop implemented sometime
-            setRisk(2);
+            setBal(newBal); //no fees to charge, so this is a good withdrawl
         }
+        return "You have withdrawn $" + displayNum(amount) + " from you account.";
     }
     else
     {
-        setBal(newBal);
+        return "The account is currently closed\n";
     }
-    string amnt = to_string(amount);
-    amnt = amnt.substr(0, amnt.length() - 4); //takes off the "0000" at the end of the double
-    return "You have withdrawn $" + amnt + " from you account.";
 }
 
 void CheckingAccount::closeAcc()
 {
-    ;
+    setIsClosed(true);
 }
 #endif
