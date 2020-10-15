@@ -1,5 +1,10 @@
 /*
-Group Members: Nathan Obert M03134502, Keegan Maynard 
+Group Members: Nathan Obert M03134502 and Keegan Maynard M03114078
+This header file is the parent class for the account types, and includes common members and methods such as balance, interest rate, service charges, 
+and status of the account (closed or open). This header file includes a public constructor to initialize the accounts with default values, public methods to 
+deposit or withdraw, as well as other methods to perform service charges, calculate interest, round the values of the account, and open or close the account. 
+The BankAccount header file was not used to compute much, if any, of the mathematics for the savings or checking accounts, but was used to store common members
+and methods that both header files would need. 
 */
 #ifndef BANKACCOUNT_H
 #define BANKACCOUNT_H
