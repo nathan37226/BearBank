@@ -40,7 +40,7 @@ public:
     bool isOpen();
 
 
-    static bool yearlyChargeEnabled;
+    static bool YEARLY_CHARGE_ENABLED;
     static int LAST_YEARLY_CHARGE;
     static string displayNum(double input);
     static string CURRENT_ACCT_NUM; //global variable for acct num
@@ -50,7 +50,7 @@ public:
 string BankAccount::CURRENT_ACCT_NUM = "00001"; //initial value, means there can be up to 99999 distinct accounts
 time_t BankAccount::LAST_INT_CALCULATION = time(0);
 int BankAccount::LAST_YEARLY_CHARGE = 120; //number of years after 1900
-bool BankAccount::yearlyChargeEnabled = false; //must set to true to turn on yearly charges
+bool BankAccount::YEARLY_CHARGE_ENABLED = false; //must set to true to turn on yearly charges
 
 //constructor
 BankAccount::BankAccount(string actNum, double bal, double rate)

@@ -360,7 +360,7 @@ inline void computeInterest(vector<Accounts> &acctVect, time_t previousTime)
 //if yearly charges are enabled, this function will perform them if needed
 inline void performYearlyCharge(vector<Accounts> &acctVect, double serCharge)
 {
-    if (BankAccount::yearlyChargeEnabled) //only if enabled
+    if (BankAccount::YEARLY_CHARGE_ENABLED) //only if enabled
     {
         time_t t = time(0);
         tm *curTime = localtime(&t);
