@@ -33,6 +33,7 @@ inline void displayBalance(vector<Accounts> &acctVect, const string &actNum, con
 inline void userDeposit(vector<Accounts> &acctVect, string &actNum, const int &index);
 inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &index);
 inline bool validateInput(const string &inputNum);
+inline bool isValidNumber(const string &inputNum);
 inline int findAcctIndex(vector<Accounts> vect, const string &actNum);
 
 inline vector<Accounts> getInfo();
@@ -132,22 +133,49 @@ inline void userWithdraw(vector<Accounts> &acctVect, string &actNum, const int &
 //determines if a user's input is valid for depositing or withdrawing
 inline bool validateInput(const string &inputNum)
 {
-    double num = stod(inputNum);
-    if (num < 0.01) //cannot withdraw or deposit less than a cent
+    if (!isValidNumber(inputNum)) //not a valid number
     {
         return false;
     }
-    else
+    else //is a valid number, but maybe in form 120.0554 instead of 120.05
     {
-        if (num != BankAccount::roundNum(num, 2)) //e.g. depositing 10.056 isn't the same as 10.05
+        double num = stod(inputNum); //since a number, convert to double for further checking
+
+        if (num < 0.01) //cannot withdraw or deposit less than a cent
         {
             return false;
         }
-        else //if a rounded double to 2 decimals is the same as the input, then the number is valid!
+        else if (num != BankAccount::roundNum(num, 2)) //e.g. depositing 10.056 isn't the same as 10.05
         {
-            return true;
+            return false;
         }
-    }    
+        else 
+        {
+            return true; //only if everything is true
+        }
+    }  
+}
+
+//takes in an input string and determines if it's a valid number
+inline bool isValidNumber(const string &inputNum)
+{
+    string validNumbers = "0123456789.";
+    bool match = false; 
+    int count = 0;   
+
+    for (int n = 0; n < inputNum.length(); n++)
+    {
+        if (validNumbers.find( inputNum[n] ) == string::npos)
+        {
+            return false;
+        }
+        else if (inputNum[n] == validNumbers[10]) //if it's a decimal
+        {
+            count++; //keeps track of how many decimals there are
+        }   
+    }   
+    bool returnValue = (count <= 1) ? true : false; //can only be <=1 decimals in a valid number
+    return returnValue;
 }
 
 //Search act vector using an actNum, find index of account set
